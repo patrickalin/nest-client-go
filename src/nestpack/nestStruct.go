@@ -49,7 +49,7 @@ type nestStructure struct {
 		ClientVersion float64 `json:"client_version"`
 	} `json:"metadata"`
 	Structures struct {
-		StrcutureID struct {
+		StructureID struct {
 			Away        string   `json:"away"`
 			CountryCode string   `json:"country_code"`
 			Name        string   `json:"name"`
@@ -66,44 +66,45 @@ type Nest interface {
 	GetTargetTemperature() float64
 	GetHumidity() float64
 	GetAway() string
+	ShowPrettyAll() int
 }
 
-func (nestInfo *nestStructure) showPrettyAll() {
+func (nestInfo nestStructure) ShowPrettyAll() int {
 	out, err := json.Marshal(nestInfo)
 	if err != nil {
 		fmt.Println("Error with parsing Json")
 		log.Fatal(err)
 	}
 	fmt.Printf("Decode : \n %s \n\n", out)
+	return 2
 }
 
-func (nestInfo *nestStructure) GetDeviceId() string {
+func (nestInfo nestStructure) GetDeviceId() string {
 	return nestInfo.Devices.Thermostats.ThermostatID.DeviceID
 }
 
-func (nestInfo *nestStructure) GetSoftwareVersion() string {
+func (nestInfo nestStructure) GetSoftwareVersion() string {
 	return nestInfo.Devices.Thermostats.ThermostatID.SoftwareVersion
 }
 
-func (nestInfo *nestStructure) GetAmbientTemperature() float64 {
+func (nestInfo nestStructure) GetAmbientTemperature() float64 {
 	return nestInfo.Devices.Thermostats.ThermostatID.AmbientTemperatureC
 }
 
-func (nestInfo *nestStructure) GetTargetTemperature() float64 {
+func (nestInfo nestStructure) GetTargetTemperature() float64 {
 	return nestInfo.Devices.Thermostats.ThermostatID.TargetTemperatureC
 }
 
-func (nestInfo *nestStructure) GetHumidity() float64 {
+func (nestInfo nestStructure) GetHumidity() float64 {
 	return nestInfo.Devices.Thermostats.ThermostatID.Humidity
 }
 
-func (nestInfo *nestStructure) GetAway() string {
-	return nestInfo.Structures.StrcutureID.Away
+func (nestInfo nestStructure) GetAway() string {
+	return nestInfo.Structures.StructureID.Away
 }
 
 func New(body []byte) Nest {
-	var nestInfo = new(nestStructure)
+	var nestInfo nestStructure
 	json.Unmarshal(body, &nestInfo)
-	nestInfo.showPrettyAll()
 	return nestInfo
 }

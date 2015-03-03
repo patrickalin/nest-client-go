@@ -25,12 +25,18 @@ func (rest *restHTTP) GetBody(url string) []byte {
 
 	//read Body
 	body, err := ioutil.ReadAll(resp.Body)
-	defer resp.Body.Close()
+
 	if err != nil {
 		fmt.Println("Error with read Body")
 		log.Fatal(err)
 	}
 	fmt.Printf("Body : \n %s \n\n", body)
+
+	if body == nil {
+		fmt.Println("Error the body is null, error in the secret key in the config.json ? ")
+	}
+	defer resp.Body.Close()
+
 	return body
 }
 

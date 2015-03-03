@@ -20,6 +20,7 @@ func main() {
 
 	// get Nest JSON and parse information in Nest Go Structure
 	myNest := nestpack.New(body)
+	myNest.ShowPrettyAll()
 
 	// display major informations to console
 	nestpack.DisplayToConsole(myNest)
