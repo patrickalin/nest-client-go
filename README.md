@@ -9,13 +9,14 @@ with the secret key receive on https://developer.nest.com/
 You must modify the src/nestStructure/nestStructure.go
 with your thermostatID end with your structureID
 
-How find these 2 ID's : 
-execute :
+To find these 2 ID's, execute one time :
+
     curl -L -X GET -H "Accept: application/json" "https://developer-api.nest.com/?auth=c.557" with you key
 
 #Pre installation
 
 install git 
+
 install go from http://golang.org/ 
 
 #Installation
