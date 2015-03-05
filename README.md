@@ -1,6 +1,34 @@
 # GoNestThermostatAPIRest
 How to execute a Get on the Nest API Thermostat in Go (Golang)
 
+#Configuration
+
+You must modify the bin/config.json 
+with the secret key receive on https://developer.nest.com/
+
+You must modify the src/nestStructure/nestStructure.go
+with your thermostatID end with your structureID
+
+How find these 2 ID's : 
+execute :
+    curl -L -X GET -H "Accept: application/json" "https://developer-api.nest.com/?auth=c.557" with you key
+
+#Pre installation
+
+install git 
+install go from http://golang.org/ 
+
+#Installation
+
+    cd [PATH]
+    go get -v .
+    export GOBIN=[PATH]/bin
+    go install
+
+#Execution
+
+    ./bin/GoNestThermostatAPIRest
+
 # Example of result
 
      Body : 
@@ -15,3 +43,7 @@ How to execute a Get on the Nest API Thermostat in Go (Golang)
     SoftwareVersion : 	 4.3.3
     TargetTemperatureC : 	 20.0
     Away : 	 home
+
+#Thanks
+
+http://mervine.net/json2struct for transform JSON to Go struct
