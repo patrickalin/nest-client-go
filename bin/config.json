@@ -1,4 +1,11 @@
 {
-	"url": "https://developer-api.nest.com/?auth=",
-	"access_token": "c.557"
+	"nest_url": "https://developer-api.nest.com/?auth=",
+	"nest_access_token": "c.557",
+	"influxDB_server": "localhost",
+	"influxDB_server_port": "8086",
+	"influxDB_username": "root",
+	"influxDB_password": "root",
+	"influxDB_database": "nest",
+	"influxDB_activated": "true",
+	"console_activated": "true"
 }

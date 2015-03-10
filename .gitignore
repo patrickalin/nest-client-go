@@ -1,0 +1,9 @@
+bin/GoNestThermostatAPIRest
+bin/
+config.json
+src/github.com/
+src/golang.org/
+src/gopkg.in/
+GoNestThermostatAPIRest
+pkg/
+

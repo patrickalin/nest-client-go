@@ -4,7 +4,11 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"config"
+	"rest"
 )
+
+var debug = false
 
 // generate by http://mervine.net/json2struct
 // you must replace your ThermostatID and you structure ID
@@ -75,7 +79,10 @@ func (nestInfo nestStructure) ShowPrettyAll() int {
 		fmt.Println("Error with parsing Json")
 		log.Fatal(err)
 	}
-	fmt.Printf("Decode : \n %s \n\n", out)
+	if debug {
+		fmt.Printf("Decode:> \n %s \n\n", out)
+		
+	}
 	return 2
 }
 
@@ -103,8 +110,13 @@ func (nestInfo nestStructure) GetAway() string {
 	return nestInfo.Structures.StructureID.Away
 }
 
-func New(body []byte) Nest {
+func New(oneConfig config.ConfigStructure) Nest {
+
+	// get body from Rest API
+	myRest := new(rest.RestHTTP)
+	myRest.Get(oneConfig.NestURL)
+
 	var nestInfo nestStructure
-	json.Unmarshal(body, &nestInfo)
+	json.Unmarshal(myRest.GetBody(), &nestInfo)
 	return nestInfo
 }
