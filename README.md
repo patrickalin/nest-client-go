@@ -47,8 +47,8 @@ install go from http://golang.org/
 
 #Thanks
 
+https://github.com/tixu for testing code
+
 http://mervine.net/json2struct for transform JSON to Go struct
 
-github.com/spf13/viper for read config 
-
-https://github.com/rossdylan/influxdbc for client influxdb
+http://github.com/spf13/viper for read config
