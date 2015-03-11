@@ -118,5 +118,8 @@ func New(oneConfig config.ConfigStructure) Nest {
 
 	var nestInfo nestStructure
 	json.Unmarshal(myRest.GetBody(), &nestInfo)
+
+	nestInfo.ShowPrettyAll()
+
 	return nestInfo
 }

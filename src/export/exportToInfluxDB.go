@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"encoding/json"
 	"rest"
+	"time"
 )
 
 type influxDBStruct struct {
@@ -15,6 +16,8 @@ type influxDBStruct struct {
 }
 
 func SendToInfluxDB(oneNest nestStructure.Nest,  oneConfig config.ConfigStructure) {
+
+	fmt.Printf("\n %s :> Send Data to InfluxDB\n", time.Now().Format(time.RFC850))
 
 	influxDBData := influxDBStruct{}
 	influxDBData.Columns = [1]string{"Temp"}
