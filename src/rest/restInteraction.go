@@ -1,17 +1,17 @@
 package rest
 
 import (
+	"bytes"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
-	"bytes"
 )
 
 type RestHTTP struct {
 	status string
 	header http.Header
-	body []byte
+	body   []byte
 }
 
 var debug = false
@@ -20,7 +20,7 @@ var debug = false
 func (r *RestHTTP) Get(url string) {
 
 	if debug {
-		fmt.Println("Rest Get URL:>", url) 
+		fmt.Println("Rest Get URL:>", url)
 	}
 
 	resp, err := http.Get(url)
@@ -28,13 +28,13 @@ func (r *RestHTTP) Get(url string) {
 		fmt.Println("Get URL : " + url)
 		log.Fatal(err)
 	}
- 	
- 	defer resp.Body.Close()
- 	
- 	if debug {
- 		fmt.Println("Get response Status:>", resp.Status)
-    	fmt.Println("Get response Headers:>", resp.Header)
-    }
+
+	defer resp.Body.Close()
+
+	if debug {
+		fmt.Println("Get response Status:>", resp.Status)
+		fmt.Println("Get response Headers:>", resp.Header)
+	}
 
 	//read Body
 	body, err := ioutil.ReadAll(resp.Body)
@@ -46,7 +46,7 @@ func (r *RestHTTP) Get(url string) {
 	if debug {
 		fmt.Printf("Body : \n %s \n\n", body)
 	}
-	
+
 	if body == nil {
 		fmt.Println("Error the body is null, error in the secret key in the config.json ? ")
 		log.Fatal(err)
@@ -61,10 +61,10 @@ func (r *RestHTTP) Get(url string) {
 func (r *RestHTTP) PostJSON(url string, buffer []byte) {
 
 	if debug {
-		fmt.Println("\n") 
-		fmt.Println("URL Post :>", url) 
+		fmt.Println("\n")
+		fmt.Println("URL Post :>", url)
 		fmt.Printf("Decode Post :> %s \n\n", buffer)
- 	}
+	}
 
 	resp, err := http.Post(url, "application/json", bytes.NewBuffer(buffer))
 	if err != nil {
@@ -72,7 +72,7 @@ func (r *RestHTTP) PostJSON(url string, buffer []byte) {
 		log.Fatal(err)
 	}
 
- 	defer resp.Body.Close()
+	defer resp.Body.Close()
 
 	//read Body
 	body, err := ioutil.ReadAll(resp.Body)
@@ -87,10 +87,17 @@ func (r *RestHTTP) PostJSON(url string, buffer []byte) {
 		log.Fatal(err)
 	}
 
- 	if debug {
+	if resp.Status != "200 OK" || debug {
+		fmt.Println("\n URL Post :>", url)
+		fmt.Printf("Decode Post :> %s \n\n", buffer)
 		fmt.Println("Post response Status:>", resp.Status)
-    	fmt.Println("Post response Headers:>", resp.Header)
- 	   	fmt.Println("Post response Body:>", string(body))
+		fmt.Println("Post response Headers:>", resp.Header)
+		fmt.Println("Post response Body:>", string(body))
+	}
+
+	if resp.Status != "200 OK" {
+		fmt.Println("Error status Post Rest ")
+		log.Fatal(err)
 	}
 
 	r.status = resp.Status
