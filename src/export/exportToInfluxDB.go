@@ -56,6 +56,6 @@ func sendPost(influxDBData influxDBStruct, oneConfig config.ConfigStructure) {
 	fullURL := fmt.Sprint("http://", oneConfig.InfluxDBServer, ":", oneConfig.InfluxDBServerPort, "/db/", oneConfig.InfluxDBDatabase, "/series?u=", oneConfig.InfluxDBUsername, "&p=", oneConfig.InfluxDBPassword)
 
 	//curl -X POST -d '[{"name":"foo","columns":["val"],"points":[[23]]}]' 'http://localhost:8086/db/nest/series?u=root&p=root'
-	oneRest := new(rest.RestHTTP)
+	oneRest := rest.MakeNew()
 	oneRest.PostJSON(fullURL, data)
 }

@@ -1,10 +1,10 @@
 package nestStructure
 
 import (
+	"config"
 	"encoding/json"
 	"fmt"
 	"log"
-	"config"
 	"rest"
 )
 
@@ -63,6 +63,15 @@ type nestStructure struct {
 	} `json:"structures"`
 }
 
+type nestError struct {
+	message error
+	advice  string
+}
+
+func (e *nestError) Error() string {
+	return fmt.Sprintf("\n \t NestError :> %s \n\t Advice :> %s", e.message, e.advice)
+}
+
 type Nest interface {
 	GetDeviceId() string
 	GetSoftwareVersion() string
@@ -81,7 +90,7 @@ func (nestInfo nestStructure) ShowPrettyAll() int {
 	}
 	if debug {
 		fmt.Printf("Decode:> \n %s \n\n", out)
-		
+
 	}
 	return 2
 }
@@ -113,11 +122,16 @@ func (nestInfo nestStructure) GetAway() string {
 func New(oneConfig config.ConfigStructure) Nest {
 
 	// get body from Rest API
-	myRest := new(rest.RestHTTP)
-	myRest.Get(oneConfig.NestURL)
+	myRest := rest.MakeNew()
+	err := myRest.Get(oneConfig.NestURL)
+
+	if err != nil {
+		log.Fatal(&nestError{err, "Problem with call rest"})
+	}
 
 	var nestInfo nestStructure
-	json.Unmarshal(myRest.GetBody(), &nestInfo)
+	body, _ := myRest.GetBody()
+	json.Unmarshal(body, &nestInfo)
 
 	nestInfo.ShowPrettyAll()
 

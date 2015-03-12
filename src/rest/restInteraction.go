@@ -8,16 +8,36 @@ import (
 	"net/http"
 )
 
-type RestHTTP struct {
+type restHTTP struct {
 	status string
 	header http.Header
 	body   []byte
 }
 
+type RestHTTP interface {
+	GetBody() ([]byte, error)
+	Get(url string) (err error)
+	PostJSON(url string, buffer []byte) (err error)
+}
+
+type restError struct {
+	message error
+	url     string
+	advice  string
+}
+
+func (e *restError) Error() string {
+	return fmt.Sprintf("\n \t RestError :> %s \n\t URL :> %s \n\t Advice :> %s", e.message, e.url, e.advice)
+}
+
+func MakeNew() (rest RestHTTP) {
+	return &restHTTP{}
+}
+
 var debug = false
 
 // Get Rest on the Nest API
-func (r *RestHTTP) Get(url string) {
+func (r *restHTTP) Get(url string) (err error) {
 
 	if debug {
 		fmt.Println("Rest Get URL:>", url)
@@ -25,8 +45,7 @@ func (r *RestHTTP) Get(url string) {
 
 	resp, err := http.Get(url)
 	if err != nil {
-		fmt.Println("Get URL : " + url)
-		log.Fatal(err)
+		return &restError{err, url, "Check your internet connection"}
 	}
 
 	defer resp.Body.Close()
@@ -55,10 +74,12 @@ func (r *RestHTTP) Get(url string) {
 	r.status = resp.Status
 	r.header = resp.Header
 	r.body = body
+
+	return nil
 }
 
 // Post Rest on the Nest API
-func (r *RestHTTP) PostJSON(url string, buffer []byte) {
+func (r *restHTTP) PostJSON(url string, buffer []byte) (err error) {
 
 	if debug {
 		fmt.Println("\n")
@@ -103,8 +124,10 @@ func (r *RestHTTP) PostJSON(url string, buffer []byte) {
 	r.status = resp.Status
 	r.header = resp.Header
 	r.body = body
+
+	return nil
 }
 
-func (r *RestHTTP) GetBody() []byte {
-	return r.body
+func (r *restHTTP) GetBody() ([]byte, error) {
+	return r.body, nil
 }
