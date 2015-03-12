@@ -44,7 +44,7 @@ func schedule() {
 
 func repeat() {
 	// get Nest JSON and parse information in Nest Go Structure
-	myNest := nestStructure.New(myConfig)
+	myNest := nestStructure.MakeNew(myConfig)
 
 	if myConfig.ConsoleActivated == "true" {
 		// display major informations to console

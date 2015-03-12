@@ -119,7 +119,7 @@ func (nestInfo nestStructure) GetAway() string {
 	return nestInfo.Structures.StructureID.Away
 }
 
-func New(oneConfig config.ConfigStructure) Nest {
+func MakeNew(oneConfig config.ConfigStructure) Nest {
 
 	// get body from Rest API
 	myRest := rest.MakeNew()
