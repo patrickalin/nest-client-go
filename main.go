@@ -17,6 +17,11 @@ const configName = "config"
 
 var myConfig config.ConfigStructure
 
+var nestMessageToConsole = make(chan nestStructure.NestStructure)
+var nestMessageToInfluxDB = make(chan nestStructure.NestStructure)
+
+var myTime = 1 * time.Minute
+
 func main() {
 
 	fmt.Printf("\n %s :> Nest Thermostat Go Call\n\n", time.Now().Format(time.RFC850))
@@ -24,11 +29,19 @@ func main() {
 	// getConfig from the file config.json
 	myConfig = config.New(configName)
 
+	//init listeners
+	if myConfig.ConsoleActivated == "true" {
+		export.InitConsole(nestMessageToConsole)
+	}
+	if myConfig.InfluxDBActivated == "true" {
+		export.InitInfluxDB(nestMessageToInfluxDB, myConfig)
+	}
+
 	schedule()
 }
 
 func schedule() {
-	ticker := time.NewTicker(1 * time.Minute)
+	ticker := time.NewTicker(myTime)
 	quit := make(chan struct{})
 	repeat()
 	for {
@@ -46,13 +59,8 @@ func repeat() {
 	// get Nest JSON and parse information in Nest Go Structure
 	myNest := nestStructure.MakeNew(myConfig)
 
-	if myConfig.ConsoleActivated == "true" {
-		// display major informations to console
-		export.DisplayToConsole(myNest)
-	}
+	// display major informations to console or to influx DB
+	nestMessageToConsole <- myNest
+	nestMessageToInfluxDB <- myNest
 
-	if myConfig.InfluxDBActivated == "true" {
-		// send to influxDB
-		export.SendToInfluxDB(myNest, myConfig)
-	}
 }
