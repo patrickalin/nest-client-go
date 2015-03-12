@@ -63,15 +63,6 @@ type nestStructure struct {
 	} `json:"structures"`
 }
 
-type nestError struct {
-	message error
-	advice  string
-}
-
-func (e *nestError) Error() string {
-	return fmt.Sprintf("\n \t NestError :> %s \n\t Advice :> %s", e.message, e.advice)
-}
-
 type Nest interface {
 	GetDeviceId() string
 	GetSoftwareVersion() string
@@ -80,6 +71,15 @@ type Nest interface {
 	GetHumidity() float64
 	GetAway() string
 	ShowPrettyAll() int
+}
+
+type nestError struct {
+	message error
+	advice  string
+}
+
+func (e *nestError) Error() string {
+	return fmt.Sprintf("\n \t NestError :> %s \n\t Advice :> %s", e.message, e.advice)
 }
 
 func (nestInfo nestStructure) ShowPrettyAll() int {
