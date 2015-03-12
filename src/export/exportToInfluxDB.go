@@ -4,6 +4,7 @@ import (
 	"config"
 	"encoding/json"
 	"fmt"
+	"log"
 	"nestStructure"
 	"rest"
 	"time"
@@ -13,6 +14,15 @@ type influxDBStruct struct {
 	Columns [3]string     `json:"columns"`
 	Serie   string        `json:"name"`
 	Points  [1][3]float64 `json:"points"`
+}
+
+type influxDBError struct {
+	message error
+	advice  string
+}
+
+func (e *influxDBError) Error() string {
+	return fmt.Sprintf("\n \t InfluxDBError :> %s \n\t Advice :> %s", e.message, e.advice)
 }
 
 func SendToInfluxDB(oneNest nestStructure.Nest, oneConfig config.ConfigStructure) {
@@ -28,8 +38,10 @@ func SendToInfluxDB(oneNest nestStructure.Nest, oneConfig config.ConfigStructure
 	influxDBData.Points[0][1] = oneNest.GetAmbientTemperature()
 	influxDBData.Points[0][2] = oneNest.GetHumidity()
 
-	sendPost(influxDBData, oneConfig)
-
+	err := sendPost(influxDBData, oneConfig)
+	if err != nil {
+		log.Fatal(&influxDBError{err, "Error sent Data to Influx DB"})
+	}
 	/*influxDBData.Columns = [1]string{"Version"}
 	influxDBData.Points = [1][1]float64{{0.0}}
 	influxDBData.Serie = "SoftwareVersion"
@@ -47,7 +59,7 @@ func SendToInfluxDB(oneNest nestStructure.Nest, oneConfig config.ConfigStructure
 	sendPost(influxDBData, oneConfig)*/
 }
 
-func sendPost(influxDBData influxDBStruct, oneConfig config.ConfigStructure) {
+func sendPost(influxDBData influxDBStruct, oneConfig config.ConfigStructure) (err error) {
 	data, _ := json.Marshal(influxDBData)
 
 	data = append(data, byte(']'))
@@ -57,5 +69,9 @@ func sendPost(influxDBData influxDBStruct, oneConfig config.ConfigStructure) {
 
 	//curl -X POST -d '[{"name":"foo","columns":["val"],"points":[[23]]}]' 'http://localhost:8086/db/nest/series?u=root&p=root'
 	oneRest := rest.MakeNew()
-	oneRest.PostJSON(fullURL, data)
+	err = oneRest.PostJSON(fullURL, data)
+	if err != nil {
+		return &influxDBError{err, "Error with Post : Check if InfluxDB is running"}
+	}
+	return nil
 }

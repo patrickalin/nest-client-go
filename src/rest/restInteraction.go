@@ -59,16 +59,14 @@ func (r *restHTTP) Get(url string) (err error) {
 	body, err := ioutil.ReadAll(resp.Body)
 
 	if err != nil {
-		fmt.Println("Error with read Body")
-		log.Fatal(err)
+		return &restError{err, url, "Error with read Body"}
 	}
 	if debug {
 		fmt.Printf("Body : \n %s \n\n", body)
 	}
 
 	if body == nil {
-		fmt.Println("Error the body is null, error in the secret key in the config.json ? ")
-		log.Fatal(err)
+		return &restError{err, url, "Error the body is null, error in the secret key in the config.json ? "}
 	}
 
 	r.status = resp.Status
@@ -89,8 +87,7 @@ func (r *restHTTP) PostJSON(url string, buffer []byte) (err error) {
 
 	resp, err := http.Post(url, "application/json", bytes.NewBuffer(buffer))
 	if err != nil {
-		fmt.Println("Post URL : " + url)
-		log.Fatal(err)
+		return &restError{err, url, "Check your internet connection"}
 	}
 
 	defer resp.Body.Close()
@@ -99,8 +96,7 @@ func (r *restHTTP) PostJSON(url string, buffer []byte) (err error) {
 	body, err := ioutil.ReadAll(resp.Body)
 
 	if err != nil {
-		fmt.Println("Error with read Body")
-		log.Fatal(err)
+		return &restError{err, url, "Error with read Body"}
 	}
 
 	if body == nil {
