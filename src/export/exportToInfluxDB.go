@@ -25,7 +25,7 @@ func (e *influxDBError) Error() string {
 	return fmt.Sprintf("\n \t InfluxDBError :> %s \n\t Advice :> %s", e.message, e.advice)
 }
 
-func SendToInfluxDB(oneNest nestStructure.Nest, oneConfig config.ConfigStructure) {
+func SendToInfluxDB(oneNest nestStructure.NestStructure, oneConfig config.ConfigStructure) {
 
 	fmt.Printf("\n %s :> Send Data to InfluxDB\n", time.Now().Format(time.RFC850))
 

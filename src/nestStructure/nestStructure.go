@@ -63,7 +63,7 @@ type nestStructure struct {
 	} `json:"structures"`
 }
 
-type Nest interface {
+type NestStructure interface {
 	GetDeviceId() string
 	GetSoftwareVersion() string
 	GetAmbientTemperature() float64
@@ -119,7 +119,7 @@ func (nestInfo nestStructure) GetAway() string {
 	return nestInfo.Structures.StructureID.Away
 }
 
-func MakeNew(oneConfig config.ConfigStructure) Nest {
+func MakeNew(oneConfig config.ConfigStructure) NestStructure {
 
 	// get body from Rest API
 	myRest := rest.MakeNew()
