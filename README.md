@@ -1,7 +1,10 @@
 # GoNestThermostatAPIRest
-This code execute un call to the Nest API Thermostat in Go (Golang).
+This code execute a call to the Nest API Thermostat in Go (Golang).
 Put the result in the consol.
-Put the resutl in a influx DB.
+Put the result in a influx DB.
+
+![InfluxDB Image ](https://github.com/patrickalin/GoNestThermostatAPIRest/blob/master/img/InfluxDB.png)
+
 
 #Configuration
 
