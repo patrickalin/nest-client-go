@@ -66,8 +66,10 @@ type nestStructure struct {
 type NestStructure interface {
 	GetDeviceId() string
 	GetSoftwareVersion() string
-	GetAmbientTemperature() float64
-	GetTargetTemperature() float64
+	GetAmbientTemperatureC() float64
+	GetTargetTemperatureC() float64
+	GetAmbientTemperatureF() float64
+	GetTargetTemperatureF() float64
 	GetHumidity() float64
 	GetAway() string
 	ShowPrettyAll() int
@@ -103,11 +105,19 @@ func (nestInfo nestStructure) GetSoftwareVersion() string {
 	return nestInfo.Devices.Thermostats.ThermostatID.SoftwareVersion
 }
 
-func (nestInfo nestStructure) GetAmbientTemperature() float64 {
+func (nestInfo nestStructure) GetAmbientTemperatureC() float64 {
 	return nestInfo.Devices.Thermostats.ThermostatID.AmbientTemperatureC
 }
 
-func (nestInfo nestStructure) GetTargetTemperature() float64 {
+func (nestInfo nestStructure) GetTargetTemperatureF() float64 {
+	return nestInfo.Devices.Thermostats.ThermostatID.TargetTemperatureF
+}
+
+func (nestInfo nestStructure) GetAmbientTemperatureF() float64 {
+	return nestInfo.Devices.Thermostats.ThermostatID.AmbientTemperatureF
+}
+
+func (nestInfo nestStructure) GetTargetTemperatureC() float64 {
 	return nestInfo.Devices.Thermostats.ThermostatID.TargetTemperatureC
 }
 

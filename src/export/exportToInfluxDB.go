@@ -11,9 +11,9 @@ import (
 )
 
 type influxDBStruct struct {
-	Columns [3]string     `json:"columns"`
-	Serie   string        `json:"name"`
-	Points  [1][3]float64 `json:"points"`
+	Columns [6]string         `json:"columns"`
+	Serie   string            `json:"name"`
+	Points  [1][6]interface{} `json:"points"`
 }
 
 type influxDBError struct {
@@ -30,33 +30,28 @@ func sendToInfluxDB(oneNest nestStructure.NestStructure, oneConfig config.Config
 	fmt.Printf("\n %s :> Send Data to InfluxDB\n", time.Now().Format(time.RFC850))
 
 	influxDBData := influxDBStruct{}
-	influxDBData.Columns = [3]string{"TargetTemperature", "AmbientTemperature", "Humidity"}
-	influxDBData.Points = [1][3]float64{{0.0, 0.0, 0.0}}
+	influxDBData.Columns = [6]string{"TargetTemperature", "AmbientTemperature", "Humidity", "Version", "Status", "Running"}
+
+	pts := [1][6]float64{{0.0, 0.0, 0.0, 0.0, 0.0, 0.0}}
+
+	for i, d := range pts {
+		influxDBData.Points[0][i] = interface{}(d)
+	}
+
 	influxDBData.Serie = "NestData"
 
-	influxDBData.Points[0][0] = oneNest.GetTargetTemperature()
-	influxDBData.Points[0][1] = oneNest.GetAmbientTemperature()
+	influxDBData.Points[0][0] = oneNest.GetTargetTemperatureC()
+	influxDBData.Points[0][1] = oneNest.GetAmbientTemperatureC()
 	influxDBData.Points[0][2] = oneNest.GetHumidity()
+	influxDBData.Points[0][3] = oneNest.GetSoftwareVersion()
+	influxDBData.Points[0][4] = oneNest.GetAway()
+	influxDBData.Points[0][5] = oneNest.GetAmbientTemperatureF() < oneNest.GetTargetTemperatureF()
 
 	err := sendPost(influxDBData, oneConfig)
 	if err != nil {
 		log.Fatal(&influxDBError{err, "Error sent Data to Influx DB"})
 	}
-	/*influxDBData.Columns = [1]string{"Version"}
-	influxDBData.Points = [1][1]float64{{0.0}}
-	influxDBData.Serie = "SoftwareVersion"
 
-	influxDBData.Points[0][0] = oneNest.GetSoftwareVersion()
-
-	sendPost(influxDBData, oneConfig)
-
-	influxDBData.Columns = [1]string{"Status"}
-	influxDBData.Points = [1][1]float64{{0.0}}
-	influxDBData.Serie = "Away"
-
-	influxDBData.Points[0][0] = oneNest.GetAway()
-
-	sendPost(influxDBData, oneConfig)*/
 }
 
 func sendPost(influxDBData influxDBStruct, oneConfig config.ConfigStructure) (err error) {
