@@ -8,6 +8,8 @@ import (
 	"net/http"
 )
 
+var debug = false
+
 type restHTTP struct {
 	status string
 	header http.Header
@@ -33,8 +35,6 @@ func (e *restError) Error() string {
 func MakeNew() (rest RestHTTP) {
 	return &restHTTP{}
 }
-
-var debug = false
 
 // Get Rest on the Nest API
 func (r *restHTTP) Get(url string) (err error) {
