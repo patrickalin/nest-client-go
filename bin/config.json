@@ -7,5 +7,6 @@
 	"influxDB_password": "root",
 	"influxDB_database": "nest",
 	"influxDB_activated": "true",
-	"console_activated": "true"
+	"console_activated": "true",
+	"refresh_timer": "60"
 }

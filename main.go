@@ -5,6 +5,7 @@ import (
 	"export"
 	"fmt"
 	"nestStructure"
+	"strconv"
 	"time"
 )
 
@@ -20,7 +21,7 @@ var myConfig config.ConfigStructure
 var nestMessageToConsole = make(chan nestStructure.NestStructure)
 var nestMessageToInfluxDB = make(chan nestStructure.NestStructure)
 
-var myTime = 1 * time.Minute
+var myTime time.Duration
 
 func main() {
 
@@ -28,6 +29,8 @@ func main() {
 
 	// getConfig from the file config.json
 	myConfig = config.New(configName)
+	i, _ := strconv.Atoi(myConfig.RefreshTimer)
+	myTime = time.Duration(i) * time.Second
 
 	//init listeners
 	if myConfig.ConsoleActivated == "true" {
