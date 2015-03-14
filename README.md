@@ -21,6 +21,8 @@ To find these 2 ID's, execute one time :
 3 In the bin/config.json
 You can ask the output to Consol or to InfluxDB
 
+3 For InfluxDB isntall the software and create the database "nest"
+
 #Pre installation
 
 install git 

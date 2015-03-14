@@ -8,5 +8,9 @@
 	"influxDB_database": "nest",
 	"influxDB_activated": "true",
 	"console_activated": "true",
-	"refresh_timer": "60"
+        "openWeather_activated": "true",
+        "refresh_timer": "10",
+        "openweathermap_url": "http://api.openweathermap.org/data/2.5/weather?units=metric&id=",
+        "openweathermap_cityID": "2800063"
+
 }

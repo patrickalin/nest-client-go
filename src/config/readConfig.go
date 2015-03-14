@@ -21,18 +21,24 @@ const influxDB_username = "influxDB_username"
 const console_activated = "console_activated"
 const influxDB_activated = "influxDB_activated"
 const refresh_timer = "refresh_timer"
+const openweathermap_url = "openweathermap_url"
+const openweathermap_cityID = "openweathermap_cityID"
+const openWeather_activated = "openWeather_activated"
 
 type ConfigStructure struct {
-	ConsoleActivated   string `json:"console_activated"`
-	InfluxDBActivated  string `json:"influxDB_activated"`
-	InfluxDBDatabase   string `json:"influxDB_database"`
-	InfluxDBPassword   string `json:"influxDB_password"`
-	InfluxDBServer     string `json:"influxDB_server"`
-	InfluxDBServerPort string `json:"influxDB_server_port"`
-	InfluxDBUsername   string `json:"influxDB_username"`
-	NestAccessToken    string `json:"nest_access_token"`
-	NestURL            string `json:"nest_url"`
-	RefreshTimer       string `json:"refresh_timer"`
+	ConsoleActivated     string `json:"console_activated"`
+	InfluxDBActivated    string `json:"influxDB_activated"`
+	InfluxDBDatabase     string `json:"influxDB_database"`
+	InfluxDBPassword     string `json:"influxDB_password"`
+	InfluxDBServer       string `json:"influxDB_server"`
+	InfluxDBServerPort   string `json:"influxDB_server_port"`
+	InfluxDBUsername     string `json:"influxDB_username"`
+	NestAccessToken      string `json:"nest_access_token"`
+	NestURL              string `json:"nest_url"`
+	OpenweathermapCityID string `json:"openweathermap_cityID"`
+	OpenweathermapURL    string `json:"openweathermap_url"`
+	RefreshTimer         string `json:"refresh_timer"`
+	OpenWeatherActivated string `json:"openWeather_activated"`
 }
 
 type Config interface {
@@ -115,6 +121,20 @@ func (configInfo ConfigStructure) ReadConfig(configName string) ConfigStructure 
 	configInfo.RefreshTimer = viper.GetString(refresh_timer)
 	if configInfo.RefreshTimer == "" {
 		log.Fatal("Check if the key " + refresh_timer + " is present in the file " + dir)
+	}
+
+	configInfo.OpenweathermapCityID = viper.GetString(openweathermap_cityID)
+	if configInfo.OpenweathermapCityID == "" {
+		log.Fatal("Check if the key " + openweathermap_cityID + " is present in the file " + dir)
+	}
+
+	configInfo.OpenweathermapURL = viper.GetString(openweathermap_url)
+	if configInfo.OpenweathermapURL == "" {
+		log.Fatal("Check if the key " + openweathermap_url + " is present in the file " + dir)
+	}
+	configInfo.OpenWeatherActivated = viper.GetString(openWeather_activated)
+	if configInfo.OpenWeatherActivated == "" {
+		log.Fatal("Check if the key " + openWeather_activated + " is present in the file " + dir)
 	}
 
 	return configInfo

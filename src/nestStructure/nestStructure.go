@@ -140,7 +140,7 @@ func MakeNew(oneConfig config.ConfigStructure) NestStructure {
 	}
 
 	var nestInfo nestStructure
-	body, _ := myRest.GetBody()
+	body := myRest.GetBody()
 	json.Unmarshal(body, &nestInfo)
 
 	nestInfo.ShowPrettyAll()

@@ -5,6 +5,7 @@ import (
 	"export"
 	"fmt"
 	"nestStructure"
+	"openweathermap"
 	"strconv"
 	"time"
 )
@@ -20,6 +21,7 @@ var myConfig config.ConfigStructure
 
 var nestMessageToConsole = make(chan nestStructure.NestStructure)
 var nestMessageToInfluxDB = make(chan nestStructure.NestStructure)
+var openWeathermapMessageToInfluxDB = make(chan openweathermap.OpenweatherStruct)
 
 var myTime time.Duration
 
@@ -36,8 +38,8 @@ func main() {
 	if myConfig.ConsoleActivated == "true" {
 		export.InitConsole(nestMessageToConsole)
 	}
-	if myConfig.InfluxDBActivated == "true" {
-		export.InitInfluxDB(nestMessageToInfluxDB, myConfig)
+	if myConfig.OpenWeatherActivated == "true" {
+		export.InitInfluxDB(nestMessageToInfluxDB, openWeathermapMessageToInfluxDB, myConfig)
 	}
 
 	schedule()
@@ -65,5 +67,10 @@ func repeat() {
 	// display major informations to console or to influx DB
 	nestMessageToConsole <- myNest
 	nestMessageToInfluxDB <- myNest
+
+	myOpenWeathermap, err := openweathermap.MakeNew(myConfig)
+	if err == nil {
+		openWeathermapMessageToInfluxDB <- myOpenWeathermap
+	}
 
 }

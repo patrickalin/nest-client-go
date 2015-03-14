@@ -17,7 +17,7 @@ type restHTTP struct {
 }
 
 type RestHTTP interface {
-	GetBody() ([]byte, error)
+	GetBody() []byte
 	Get(url string) (err error)
 	PostJSON(url string, buffer []byte) (err error)
 }
@@ -29,7 +29,7 @@ type restError struct {
 }
 
 func (e *restError) Error() string {
-	return fmt.Sprintf("\n \t RestError :> %s \n\t URL :> %s \n\t Advice :> %s", e.message, e.url, e.advice)
+	return fmt.Sprintf("\n \t RestError :> %s \n\t Rest URL :> %s \n\t Rest Advice :> %s", e.message, e.url, e.advice)
 }
 
 func MakeNew() (rest RestHTTP) {
@@ -45,15 +45,10 @@ func (r *restHTTP) Get(url string) (err error) {
 
 	resp, err := http.Get(url)
 	if err != nil {
-		return &restError{err, url, "Check your internet connection"}
+		return &restError{err, url, "Check your internet connection or if the site is alive"}
 	}
 
 	defer resp.Body.Close()
-
-	if debug {
-		fmt.Println("Get response Status:>", resp.Status)
-		fmt.Println("Get response Headers:>", resp.Header)
-	}
 
 	//read Body
 	body, err := ioutil.ReadAll(resp.Body)
@@ -61,12 +56,24 @@ func (r *restHTTP) Get(url string) (err error) {
 	if err != nil {
 		return &restError{err, url, "Error with read Body"}
 	}
+
 	if debug {
 		fmt.Printf("Body : \n %s \n\n", body)
 	}
 
 	if body == nil {
 		return &restError{err, url, "Error the body is null, error in the secret key in the config.json ? "}
+	}
+
+	if resp.StatusCode != 200 || debug {
+		fmt.Println("\n URL Get :>", url)
+		fmt.Println("Get response Status:>", resp.Status)
+		fmt.Println("Get response Headers:>", resp.Header)
+		fmt.Println("Get response Body:>", string(body))
+	}
+
+	if resp.StatusCode != 200 {
+		return &restError{err, url, "Error Status Post"}
 	}
 
 	r.status = resp.Status
@@ -87,7 +94,7 @@ func (r *restHTTP) PostJSON(url string, buffer []byte) (err error) {
 
 	resp, err := http.Post(url, "application/json", bytes.NewBuffer(buffer))
 	if err != nil {
-		return &restError{err, url, "Check your internet connection"}
+		return &restError{err, url, "Check your internet connection or if the site is alive"}
 	}
 
 	defer resp.Body.Close()
@@ -104,7 +111,7 @@ func (r *restHTTP) PostJSON(url string, buffer []byte) (err error) {
 		log.Fatal(err)
 	}
 
-	if resp.Status != "200 OK" || debug {
+	if (resp.StatusCode != 200 && resp.StatusCode != 201) || debug {
 		fmt.Println("\n URL Post :>", url)
 		fmt.Printf("Decode Post :> %s \n\n", buffer)
 		fmt.Println("Post response Status:>", resp.Status)
@@ -112,9 +119,9 @@ func (r *restHTTP) PostJSON(url string, buffer []byte) (err error) {
 		fmt.Println("Post response Body:>", string(body))
 	}
 
-	if resp.Status != "200 OK" {
-		fmt.Println("Error status Post Rest ")
-		log.Fatal(err)
+	if resp.StatusCode != 200 && resp.StatusCode != 201 {
+		fmt.Println("Post response Status:>", resp.Status)
+		return &restError{err, url, "Error Status Post"}
 	}
 
 	r.status = resp.Status
@@ -124,6 +131,6 @@ func (r *restHTTP) PostJSON(url string, buffer []byte) (err error) {
 	return nil
 }
 
-func (r *restHTTP) GetBody() ([]byte, error) {
-	return r.body, nil
+func (r *restHTTP) GetBody() []byte {
+	return r.body
 }
