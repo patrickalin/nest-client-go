@@ -4,11 +4,9 @@ import (
 	"config"
 	"encoding/json"
 	"fmt"
-	"log"
+	"mylog"
 	"rest"
 )
-
-var debug = false
 
 // generate by http://mervine.net/json2struct
 // you must replace your ThermostatID and you structure ID
@@ -88,12 +86,9 @@ func (nestInfo nestStructure) ShowPrettyAll() int {
 	out, err := json.Marshal(nestInfo)
 	if err != nil {
 		fmt.Println("Error with parsing Json")
-		log.Fatal(err)
+		mylog.Error.Fatal(err)
 	}
-	if debug {
-		fmt.Printf("Decode:> \n %s \n\n", out)
-
-	}
+	mylog.Trace.Printf("Decode:> \n %s \n\n", out)
 	return 2
 }
 
@@ -136,7 +131,7 @@ func MakeNew(oneConfig config.ConfigStructure) NestStructure {
 	err := myRest.Get(oneConfig.NestURL)
 
 	if err != nil {
-		log.Fatal(&nestError{err, "Problem with call rest"})
+		mylog.Error.Fatal(&nestError{err, "Problem with call rest"})
 	}
 
 	var nestInfo nestStructure

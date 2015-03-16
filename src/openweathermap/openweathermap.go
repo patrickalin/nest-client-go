@@ -4,11 +4,9 @@ import (
 	"config"
 	"encoding/json"
 	"fmt"
-	"log"
+	"mylog"
 	"rest"
 )
-
-var debug = false
 
 type openweatherStruct struct {
 	Clouds struct {
@@ -74,12 +72,9 @@ func (openweatherInfo openweatherStruct) ShowPrettyAll() int {
 	out, err := json.Marshal(openweatherInfo)
 	if err != nil {
 		fmt.Println("Error with parsing Json")
-		log.Fatal(err)
+		mylog.Error.Fatal(err)
 	}
-	if debug {
-		fmt.Printf("Decode openweather:> \n %s \n\n", out)
-
-	}
+	mylog.Trace.Printf("Decode openweather:> \n %s \n\n", out)
 	return 2
 }
 

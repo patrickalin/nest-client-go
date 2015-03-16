@@ -2,10 +2,9 @@ package export
 
 import (
 	"fmt"
+	"mylog"
 	"nestStructure"
 )
-
-var debug = false
 
 //print major informations from a Nest JSON to console
 func displayToConsole(oneNest nestStructure.NestStructure) {
@@ -20,9 +19,8 @@ func displayToConsole(oneNest nestStructure.NestStructure) {
 
 func InitConsole(messages chan nestStructure.NestStructure) {
 	go func() {
-		if debug {
-			fmt.Println("receive message  to export Console")
-		}
+		mylog.Trace.Println("receive message  to export Console")
+
 		for {
 			msg := <-messages
 			displayToConsole(msg)

@@ -4,7 +4,7 @@ import (
 	"config"
 	"encoding/json"
 	"fmt"
-	"log"
+	"mylog"
 	"nestStructure"
 	"openweathermap"
 	"rest"
@@ -23,7 +23,7 @@ type influxDBError struct {
 }
 
 func (e *influxDBError) Error() string {
-	return fmt.Sprintf("\n \t InfluxDBError :> %s \n\t InfluxDB Advice:> %s", e.message, e.advice)
+	return fmt.Sprintf("\n \t InfluxDBError :> %s \n\t InfluxDB Advice:> %s %s %s %s", e.message, e.advice)
 }
 
 func sendNestToInfluxDB(oneNest nestStructure.NestStructure, oneConfig config.ConfigStructure) {
@@ -50,7 +50,7 @@ func sendNestToInfluxDB(oneNest nestStructure.NestStructure, oneConfig config.Co
 
 	err := sendPost(influxDBData, oneConfig)
 	if err != nil {
-		log.Fatal(&influxDBError{err, "Error sent Data to Influx DB"})
+		mylog.Error.Fatal(&influxDBError{err, "Error sent Data to Influx DB"})
 	}
 
 }
@@ -88,7 +88,7 @@ func sendOpenWeatherToInfluxDB(oneOpenWeather openweathermap.OpenweatherStruct, 
 
 	err := sendPost(influxDBData, oneConfig)
 	if err != nil {
-		log.Fatal(&influxDBError{err, "Error sent Data to Influx DB"})
+		mylog.Error.Fatal(&influxDBError{err, "Error sent Data to Influx DB"})
 	}
 
 }
@@ -136,9 +136,7 @@ func createDB(oneConfig config.ConfigStructure) error {
 func InitInfluxDB(messagesNest chan nestStructure.NestStructure, messagesOpenWeather chan openweathermap.OpenweatherStruct, oneConfig config.ConfigStructure) {
 
 	go func() {
-		if debug {
-			fmt.Println("receive messagesNest  to export InfluxDB")
-		}
+		mylog.Trace.Println("receive messagesNest  to export InfluxDB")
 		for {
 			msg := <-messagesNest
 			sendNestToInfluxDB(msg, oneConfig)
@@ -146,9 +144,7 @@ func InitInfluxDB(messagesNest chan nestStructure.NestStructure, messagesOpenWea
 	}()
 
 	go func() {
-		if debug {
-			fmt.Println("receive messagesOpenWeather  to export InfluxDB")
-		}
+		mylog.Trace.Println("receive messagesOpenWeather  to export InfluxDB")
 		for {
 			msg := <-messagesOpenWeather
 			sendOpenWeatherToInfluxDB(msg, oneConfig)

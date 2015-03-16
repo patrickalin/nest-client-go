@@ -4,6 +4,7 @@ import (
 	"config"
 	"export"
 	"fmt"
+	"mylog"
 	"nestStructure"
 	"openweathermap"
 	"strconv"
@@ -28,6 +29,8 @@ var myTime time.Duration
 func main() {
 
 	fmt.Printf("\n %s :> Nest Thermostat Go Call\n\n", time.Now().Format(time.RFC850))
+
+	mylog.Init(mylog.ERROR)
 
 	// getConfig from the file config.json
 	myConfig = config.New(configName)

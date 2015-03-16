@@ -4,11 +4,9 @@ import (
 	"bytes"
 	"fmt"
 	"io/ioutil"
-	"log"
+	"mylog"
 	"net/http"
 )
-
-var debug = false
 
 type restHTTP struct {
 	status string
@@ -39,9 +37,7 @@ func MakeNew() (rest RestHTTP) {
 // Get Rest on the Nest API
 func (r *restHTTP) Get(url string) (err error) {
 
-	if debug {
-		fmt.Println("Rest Get URL:>", url)
-	}
+	mylog.Trace.Println("Rest Get URL:>", url)
 
 	resp, err := http.Get(url)
 	if err != nil {
@@ -57,20 +53,23 @@ func (r *restHTTP) Get(url string) (err error) {
 		return &restError{err, url, "Error with read Body"}
 	}
 
-	if debug {
-		fmt.Printf("Body : \n %s \n\n", body)
-	}
+	mylog.Trace.Printf("Body : \n %s \n\n", body)
 
 	if body == nil {
 		return &restError{err, url, "Error the body is null, error in the secret key in the config.json ? "}
 	}
 
-	if resp.StatusCode != 200 || debug {
+	if resp.StatusCode != 200 {
 		fmt.Println("\n URL Get :>", url)
 		fmt.Println("Get response Status:>", resp.Status)
 		fmt.Println("Get response Headers:>", resp.Header)
 		fmt.Println("Get response Body:>", string(body))
 	}
+
+	mylog.Trace.Println("\n URL Get :>", url)
+	mylog.Trace.Println("Get response Status:>", resp.Status)
+	mylog.Trace.Println("Get response Headers:>", resp.Header)
+	mylog.Trace.Println("Get response Body:>", string(body))
 
 	if resp.StatusCode != 200 {
 		return &restError{err, url, "Error Status Post"}
@@ -86,11 +85,9 @@ func (r *restHTTP) Get(url string) (err error) {
 // Post Rest on the Nest API
 func (r *restHTTP) PostJSON(url string, buffer []byte) (err error) {
 
-	if debug {
-		fmt.Println("\n")
-		fmt.Println("URL Post :>", url)
-		fmt.Printf("Decode Post :> %s \n\n", buffer)
-	}
+	mylog.Trace.Println("\n")
+	mylog.Trace.Println("URL Post :>", url)
+	mylog.Trace.Println("Decode Post :> %s \n\n", buffer)
 
 	resp, err := http.Post(url, "application/json", bytes.NewBuffer(buffer))
 	if err != nil {
@@ -108,16 +105,22 @@ func (r *restHTTP) PostJSON(url string, buffer []byte) (err error) {
 
 	if body == nil {
 		fmt.Println("Error the body is null, error in the secret key in the config.json ? ")
-		log.Fatal(err)
+		mylog.Error.Fatal(err)
 	}
 
-	if (resp.StatusCode != 200 && resp.StatusCode != 201) || debug {
+	if resp.StatusCode != 200 && resp.StatusCode != 201 {
 		fmt.Println("\n URL Post :>", url)
 		fmt.Printf("Decode Post :> %s \n\n", buffer)
 		fmt.Println("Post response Status:>", resp.Status)
 		fmt.Println("Post response Headers:>", resp.Header)
 		fmt.Println("Post response Body:>", string(body))
 	}
+
+	mylog.Trace.Println("\n URL Post :>", url)
+	mylog.Trace.Printf("Decode Post :> %s \n\n", buffer)
+	mylog.Trace.Println("Post response Status:>", resp.Status)
+	mylog.Trace.Println("Post response Headers:>", resp.Header)
+	mylog.Trace.Println("Post response Body:>", string(body))
 
 	if resp.StatusCode != 200 && resp.StatusCode != 201 {
 		fmt.Println("Post response Status:>", resp.Status)
