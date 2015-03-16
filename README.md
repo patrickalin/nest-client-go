@@ -35,7 +35,11 @@ This code execute a call to the Nest API Thermostat in Go (Golang).
 
 After, you can display the result with Grafana
 
-![InfluxDB Image ](https://github.com/patrickalin/GoNestThermostatAPIRest/blob/master/img/Grafana.png)
+![Grafana Image ](https://github.com/patrickalin/GoNestThermostatAPIRest/blob/master/img/Grafana.png)
+
+#Put data from OpenWeather in InfluxDB
+
+![OpenWeather Image ](https://github.com/patrickalin/GoNestThermostatAPIRest/blob/master/img/OpenWeather.png)
 
 #Configuration
 
