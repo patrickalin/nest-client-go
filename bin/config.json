@@ -10,8 +10,9 @@
 	"console_activated": "true",
     "openWeather_activated": "true",
     "refresh_timer": "10",
-    "openweathermap_url": "http://api.openweathermap.org/data/2.5/weather?units=metric&id=",
-    "openweathermap_cityID": "2800063",
+    "openweathermap_url": "http://api.openweathermap.org/data/2.5/weather?units=metric",
+    "openweathermap_cityID": "&id=2800063",
+    "openweathermap_APPID": "&APPID=1111111111",
 	"log_level": 1
 
 }

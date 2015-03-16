@@ -118,7 +118,7 @@ func MakeNew(oneConfig config.ConfigStructure) (OpenweatherStruct, error) {
 
 	// get body from Rest API
 	myRest := rest.MakeNew()
-	err := myRest.Get(oneConfig.OpenweathermapURL + oneConfig.OpenweathermapCityID)
+	err := myRest.Get(oneConfig.OpenweathermapURL + oneConfig.OpenweathermapCityID + oneConfig.OpenweathermapAPPID)
 	if err != nil {
 		fmt.Println(&openweatherError{err, "Problem with call rest Openweather"})
 		return nil, err

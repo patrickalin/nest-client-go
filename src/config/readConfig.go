@@ -22,8 +22,10 @@ const refresh_timer = "refresh_timer"
 const openweathermap_url = "openweathermap_url"
 const openweathermap_cityID = "openweathermap_cityID"
 const openWeather_activated = "openWeather_activated"
+const openweathermap_APPID = "openweathermap_APPID"
 const log_level = "log_level"
 
+//use http://mervine.net/json2struct
 type ConfigStructure struct {
 	ConsoleActivated     string `json:"console_activated"`
 	InfluxDBActivated    string `json:"influxDB_activated"`
@@ -32,13 +34,14 @@ type ConfigStructure struct {
 	InfluxDBServer       string `json:"influxDB_server"`
 	InfluxDBServerPort   string `json:"influxDB_server_port"`
 	InfluxDBUsername     string `json:"influxDB_username"`
+	LogLevel             string `json:"log_level"`
 	NestAccessToken      string `json:"nest_access_token"`
 	NestURL              string `json:"nest_url"`
+	OpenWeatherActivated string `json:"openWeather_activated"`
+	OpenweathermapAPPID  string `json:"openweathermap_APPID"`
 	OpenweathermapCityID string `json:"openweathermap_cityID"`
 	OpenweathermapURL    string `json:"openweathermap_url"`
 	RefreshTimer         string `json:"refresh_timer"`
-	OpenWeatherActivated string `json:"openWeather_activated"`
-	LogLevel             string `json:"log_level"`
 }
 
 type Config interface {
@@ -135,6 +138,10 @@ func (configInfo ConfigStructure) ReadConfig(configName string) ConfigStructure 
 	configInfo.LogLevel = viper.GetString(log_level)
 	if configInfo.LogLevel == "" {
 		mylog.Error.Fatal("Check if the key " + log_level + " is present in the file " + dir)
+	}
+	configInfo.OpenweathermapAPPID = viper.GetString(openweathermap_APPID)
+	if configInfo.OpenweathermapAPPID == "" {
+		mylog.Error.Fatal("Check if the key " + openweathermap_APPID + " is present in the file " + dir)
 	}
 	return configInfo
 }
