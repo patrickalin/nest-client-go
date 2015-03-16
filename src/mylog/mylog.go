@@ -1,6 +1,7 @@
 package mylog
 
 import (
+	"fmt"
 	"io"
 	"io/ioutil"
 	"log"
@@ -15,13 +16,14 @@ var Error *log.Logger
 type Level int
 
 const (
-	TRACE Level = 1 + iota
-	INFO
+	ERROR Level = 1 + iota
 	WARNING
-	ERROR
+	INFO
+	TRACE
 )
 
 func Init(logLevel Level) {
+
 	var (
 		errorHandle   io.Writer
 		infoHandle    io.Writer
@@ -40,17 +42,21 @@ func Init(logLevel Level) {
 		warningHandle = os.Stdout
 		infoHandle = ioutil.Discard
 		traceHandle = ioutil.Discard
+		fmt.Println("\n Log Level Warning\n\n")
 	case INFO:
 		errorHandle = os.Stdout
 		warningHandle = os.Stdout
 		infoHandle = os.Stdout
 		traceHandle = ioutil.Discard
+		fmt.Println("\n Log Level Info\n\n")
 	case TRACE:
 		errorHandle = os.Stdout
 		warningHandle = os.Stdout
 		infoHandle = os.Stdout
 		traceHandle = os.Stdout
-
+		fmt.Println("\n Log Level Trace\n\n")
+	default:
+		log.Fatal("Error in Log Level")
 	}
 	Trace = log.New(traceHandle, "TRACE: ", log.Ldate|log.Ltime|log.Lshortfile)
 	Info = log.New(infoHandle, "INFO: ", log.Ldate|log.Ltime|log.Lshortfile)

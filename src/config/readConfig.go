@@ -22,6 +22,7 @@ const refresh_timer = "refresh_timer"
 const openweathermap_url = "openweathermap_url"
 const openweathermap_cityID = "openweathermap_cityID"
 const openWeather_activated = "openWeather_activated"
+const log_level = "log_level"
 
 type ConfigStructure struct {
 	ConsoleActivated     string `json:"console_activated"`
@@ -37,6 +38,7 @@ type ConfigStructure struct {
 	OpenweathermapURL    string `json:"openweathermap_url"`
 	RefreshTimer         string `json:"refresh_timer"`
 	OpenWeatherActivated string `json:"openWeather_activated"`
+	LogLevel             string `json:"log_level"`
 }
 
 type Config interface {
@@ -130,7 +132,10 @@ func (configInfo ConfigStructure) ReadConfig(configName string) ConfigStructure 
 	if configInfo.OpenWeatherActivated == "" {
 		mylog.Error.Fatal("Check if the key " + openWeather_activated + " is present in the file " + dir)
 	}
-
+	configInfo.LogLevel = viper.GetString(log_level)
+	if configInfo.LogLevel == "" {
+		mylog.Error.Fatal("Check if the key " + log_level + " is present in the file " + dir)
+	}
 	return configInfo
 }
 

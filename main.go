@@ -34,6 +34,10 @@ func main() {
 
 	// getConfig from the file config.json
 	myConfig = config.New(configName)
+
+	level, _ := strconv.Atoi(myConfig.LogLevel)
+	mylog.Init(mylog.Level(level))
+
 	i, _ := strconv.Atoi(myConfig.RefreshTimer)
 	myTime = time.Duration(i) * time.Second
 
