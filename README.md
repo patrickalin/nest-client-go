@@ -41,23 +41,6 @@ After, you can display the result with Grafana
 
 ![OpenWeather Image ](https://github.com/patrickalin/GoNestThermostatAPIRest/blob/master/img/OpenWeather.png)
 
-#Configuration
-
-1 You must modify the bin/config.json 
-with the secret key receive on https://developer.nest.com/
-
-2 You must modify the src/nestStructure/nestStructure.go
-with your thermostatID end with your structureID
-
-To find these 2 ID's, execute one time :
-
-    curl -L -X GET -H "Accept: application/json" "https://developer-api.nest.com/?auth=c.557" with you key
-
-3 In the bin/config.json
-You can ask the output to Consol or to InfluxDB
-
-3 For InfluxDB isntall the software and create the database "nest"
-
 #Pre installation
 
 install git 
@@ -66,14 +49,36 @@ install go from http://golang.org/
 
 #Installation
 
-    cd [PATH]
+    git clone https://github.com/patrickalin/GoNestThermostatAPIRest.git
+    cd GoNestThermostatAPIRest
+    export GOPATH=$PWD
     go get -v .
-    export GOBIN=[PATH]/bin
-    go install
+    go build
+
+#Configuration
+
+1 You must copy the config.json.example to config.json
+cp config.json.example config.json
+
+2. In the config file
+modify the secret key receive on https://developer.nest.com/
+
+3 You must modify the src/nestStructure/nestStructure.go
+with your thermostatIDlv  end with your structureID
+
+To find these 2 ID's, execute one time :
+
+    curl -L -X GET -H "Accept: application/json" "https://developer-api.nest.com/?auth=c.557" with you key
+
+4 Modify all paramameters in config.json
+
+- For InfluxDB isntall the software and create the database "nest"
+
+- For OpenWeather is preferable to create a ID to put in APPID
 
 #Execution
 
-    ./bin/GoNestThermostatAPIRest
+    ./GoNestThermostatAPIRest
 
 # Example of result in Consol
 
