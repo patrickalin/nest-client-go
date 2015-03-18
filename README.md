@@ -57,20 +57,20 @@ install go from http://golang.org/
 
 #Configuration
 
-1 You must copy the config.json.example to config.json
-cp config.json.example config.json
+1. You must copy the config.json.example to config.json
+    cp config.json.example config.json
 
 2. In the config file
 modify the secret key receive on https://developer.nest.com/
 
-3 You must modify the src/nestStructure/nestStructure.go
+3. You must modify the src/nestStructure/nestStructure.go
 with your thermostatIDlv  end with your structureID
 
 To find these 2 ID's, execute one time :
 
     curl -L -X GET -H "Accept: application/json" "https://developer-api.nest.com/?auth=c.557" with you key
 
-4 Modify all paramameters in config.json
+4. Modify all paramameters in config.json
 
 - For InfluxDB isntall the software and create the database "nest"
 
