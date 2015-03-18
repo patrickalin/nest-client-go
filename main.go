@@ -3,6 +3,7 @@ package main
 import (
 	"config"
 	"export"
+	"flag"
 	"fmt"
 	"mylog"
 	"nestStructure"
@@ -18,15 +19,21 @@ Get Nest Thermostat Information
 //name of the config file
 const configName = "config"
 
-var myConfig config.ConfigStructure
+var (
+	nestMessageToConsole            = make(chan nestStructure.NestStructure)
+	nestMessageToInfluxDB           = make(chan nestStructure.NestStructure)
+	openWeathermapMessageToInfluxDB = make(chan openweathermap.OpenweatherStruct)
 
-var nestMessageToConsole = make(chan nestStructure.NestStructure)
-var nestMessageToInfluxDB = make(chan nestStructure.NestStructure)
-var openWeathermapMessageToInfluxDB = make(chan openweathermap.OpenweatherStruct)
+	myTime time.Duration
 
-var myTime time.Duration
+	myConfig config.ConfigStructure
+
+	debug = flag.String("debug", "", "Error=1, Warning=2, Info=3, Trace=4")
+)
 
 func main() {
+
+	flag.Parse()
 
 	fmt.Printf("\n %s :> Nest Thermostat Go Call\n\n", time.Now().Format(time.RFC850))
 
@@ -34,6 +41,10 @@ func main() {
 
 	// getConfig from the file config.json
 	myConfig = config.New(configName)
+
+	if *debug != "" {
+		myConfig.LogLevel = *debug
+	}
 
 	level, _ := strconv.Atoi(myConfig.LogLevel)
 	mylog.Init(mylog.Level(level))
