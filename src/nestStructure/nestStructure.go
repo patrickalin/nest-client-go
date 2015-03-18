@@ -131,12 +131,16 @@ func MakeNew(oneConfig config.ConfigStructure) NestStructure {
 	err := myRest.Get(oneConfig.NestURL)
 
 	if err != nil {
-		mylog.Error.Fatal(&nestError{err, "Problem with call rest"})
+		mylog.Error.Fatal(&nestError{err, "Problem with call rest, check the URL and the secret ID in the config file"})
 	}
 
 	var nestInfo nestStructure
 	body := myRest.GetBody()
-	json.Unmarshal(body, &nestInfo)
+
+	err = json.Unmarshal(body, &nestInfo)
+	if err != nil {
+		mylog.Error.Fatal(&nestError{err, "Problem with json to struct, problem in the struct ?"})
+	}
 
 	nestInfo.ShowPrettyAll()
 
