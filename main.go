@@ -45,7 +45,7 @@ func main() {
 	if myConfig.ConsoleActivated == "true" {
 		export.InitConsole(nestMessageToConsole)
 	}
-	if myConfig.OpenWeatherActivated == "true" {
+	if myConfig.InfluxDBActivated == "true" {
 		export.InitInfluxDB(nestMessageToInfluxDB, openWeathermapMessageToInfluxDB, myConfig)
 	}
 
@@ -71,13 +71,28 @@ func repeat() {
 	// get Nest JSON and parse information in Nest Go Structure
 	myNest := nestStructure.MakeNew(myConfig)
 
-	// display major informations to console or to influx DB
-	nestMessageToConsole <- myNest
-	nestMessageToInfluxDB <- myNest
+	go func() {
+		// display major informations to console or to influx DB
 
-	myOpenWeathermap, err := openweathermap.MakeNew(myConfig)
-	if err == nil {
-		openWeathermapMessageToInfluxDB <- myOpenWeathermap
-	}
+		if myConfig.ConsoleActivated == "true" {
+			nestMessageToConsole <- myNest
+		}
+	}()
+
+	go func() {
+		// display major informations to console to influx DB
+		if myConfig.InfluxDBActivated == "true" {
+			nestMessageToInfluxDB <- myNest
+		}
+	}()
+
+	go func() {
+		if myConfig.OpenWeatherActivated == "true" {
+			myOpenWeathermap, err := openweathermap.MakeNew(myConfig)
+			if err == nil {
+				openWeathermapMessageToInfluxDB <- myOpenWeathermap
+			}
+		}
+	}()
 
 }
