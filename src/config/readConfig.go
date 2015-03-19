@@ -2,11 +2,11 @@ package config
 
 import (
 	"fmt"
-	"mylog"
 	"os"
 	"path/filepath"
 
-	"github.com/spf13/viper"
+	mylog "github.com/patrickalin/GoMyLog"
+	viper "github.com/spf13/viper"
 )
 
 const nest_url = "nest_url"
@@ -19,29 +19,21 @@ const influxDB_username = "influxDB_username"
 const console_activated = "console_activated"
 const influxDB_activated = "influxDB_activated"
 const refresh_timer = "refresh_timer"
-const openweathermap_url = "openweathermap_url"
-const openweathermap_cityID = "openweathermap_cityID"
-const openWeather_activated = "openWeather_activated"
-const openweathermap_APPID = "openweathermap_APPID"
 const log_level = "log_level"
 
 //use http://mervine.net/json2struct
 type ConfigStructure struct {
-	ConsoleActivated     string `json:"console_activated"`
-	InfluxDBActivated    string `json:"influxDB_activated"`
-	InfluxDBDatabase     string `json:"influxDB_database"`
-	InfluxDBPassword     string `json:"influxDB_password"`
-	InfluxDBServer       string `json:"influxDB_server"`
-	InfluxDBServerPort   string `json:"influxDB_server_port"`
-	InfluxDBUsername     string `json:"influxDB_username"`
-	LogLevel             string `json:"log_level"`
-	NestAccessToken      string `json:"nest_access_token"`
-	NestURL              string `json:"nest_url"`
-	OpenWeatherActivated string `json:"openWeather_activated"`
-	OpenweathermapAPPID  string `json:"openweathermap_APPID"`
-	OpenweathermapCityID string `json:"openweathermap_cityID"`
-	OpenweathermapURL    string `json:"openweathermap_url"`
-	RefreshTimer         string `json:"refresh_timer"`
+	ConsoleActivated   string `json:"console_activated"`
+	InfluxDBActivated  string `json:"influxDB_activated"`
+	InfluxDBDatabase   string `json:"influxDB_database"`
+	InfluxDBPassword   string `json:"influxDB_password"`
+	InfluxDBServer     string `json:"influxDB_server"`
+	InfluxDBServerPort string `json:"influxDB_server_port"`
+	InfluxDBUsername   string `json:"influxDB_username"`
+	LogLevel           string `json:"log_level"`
+	NestAccessToken    string `json:"nest_access_token"`
+	NestURL            string `json:"nest_url"`
+	RefreshTimer       string `json:"refresh_timer"`
 }
 
 type Config interface {
@@ -122,27 +114,11 @@ func (configInfo ConfigStructure) ReadConfig(configName string) ConfigStructure 
 		mylog.Error.Fatal("Check if the key " + refresh_timer + " is present in the file " + dir)
 	}
 
-	configInfo.OpenweathermapCityID = viper.GetString(openweathermap_cityID)
-	if configInfo.OpenweathermapCityID == "" {
-		mylog.Error.Fatal("Check if the key " + openweathermap_cityID + " is present in the file " + dir)
-	}
-
-	configInfo.OpenweathermapURL = viper.GetString(openweathermap_url)
-	if configInfo.OpenweathermapURL == "" {
-		mylog.Error.Fatal("Check if the key " + openweathermap_url + " is present in the file " + dir)
-	}
-	configInfo.OpenWeatherActivated = viper.GetString(openWeather_activated)
-	if configInfo.OpenWeatherActivated == "" {
-		mylog.Error.Fatal("Check if the key " + openWeather_activated + " is present in the file " + dir)
-	}
 	configInfo.LogLevel = viper.GetString(log_level)
 	if configInfo.LogLevel == "" {
 		mylog.Error.Fatal("Check if the key " + log_level + " is present in the file " + dir)
 	}
-	configInfo.OpenweathermapAPPID = viper.GetString(openweathermap_APPID)
-	if configInfo.OpenweathermapAPPID == "" {
-		mylog.Error.Fatal("Check if the key " + openweathermap_APPID + " is present in the file " + dir)
-	}
+
 	return configInfo
 }
 

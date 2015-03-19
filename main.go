@@ -5,11 +5,11 @@ import (
 	"export"
 	"flag"
 	"fmt"
-	"mylog"
 	"nestStructure"
-	"openweathermap"
 	"strconv"
 	"time"
+
+	mylog "github.com/patrickalin/GoMyLog"
 )
 
 /*
@@ -20,9 +20,8 @@ Get Nest Thermostat Information
 const configName = "config"
 
 var (
-	nestMessageToConsole            = make(chan nestStructure.NestStructure)
-	nestMessageToInfluxDB           = make(chan nestStructure.NestStructure)
-	openWeathermapMessageToInfluxDB = make(chan openweathermap.OpenweatherStruct)
+	nestMessageToConsole  = make(chan nestStructure.NestStructure)
+	nestMessageToInfluxDB = make(chan nestStructure.NestStructure)
 
 	myTime time.Duration
 
@@ -46,6 +45,8 @@ func main() {
 		myConfig.LogLevel = *debug
 	}
 
+	fmt.Println(myConfig.LogLevel)
+
 	level, _ := strconv.Atoi(myConfig.LogLevel)
 	mylog.Init(mylog.Level(level))
 
@@ -57,7 +58,7 @@ func main() {
 		export.InitConsole(nestMessageToConsole)
 	}
 	if myConfig.InfluxDBActivated == "true" {
-		export.InitInfluxDB(nestMessageToInfluxDB, openWeathermapMessageToInfluxDB, myConfig)
+		export.InitInfluxDB(nestMessageToInfluxDB, myConfig)
 	}
 
 	schedule()
@@ -94,15 +95,6 @@ func repeat() {
 		// display major informations to console to influx DB
 		if myConfig.InfluxDBActivated == "true" {
 			nestMessageToInfluxDB <- myNest
-		}
-	}()
-
-	go func() {
-		if myConfig.OpenWeatherActivated == "true" {
-			myOpenWeathermap, err := openweathermap.MakeNew(myConfig)
-			if err == nil {
-				openWeathermapMessageToInfluxDB <- myOpenWeathermap
-			}
 		}
 	}()
 

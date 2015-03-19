@@ -4,11 +4,11 @@ import (
 	"config"
 	"encoding/json"
 	"fmt"
-	"mylog"
 	"nestStructure"
-	"openweathermap"
-	"rest"
 	"time"
+
+	mylog "github.com/patrickalin/GoMyLog"
+	rest "github.com/patrickalin/GoRest"
 )
 
 type influxDBStruct struct {
@@ -55,44 +55,6 @@ func sendNestToInfluxDB(oneNest nestStructure.NestStructure, oneConfig config.Co
 
 }
 
-func sendOpenWeatherToInfluxDB(oneOpenWeather openweathermap.OpenweatherStruct, oneConfig config.ConfigStructure) {
-
-	type influxDBStruct2 struct {
-		Columns [9]string         `json:"columns"`
-		Serie   string            `json:"name"`
-		Points  [1][9]interface{} `json:"points"`
-	}
-
-	fmt.Printf("\n %s :> Send OpenWeather Data to InfluxDB\n", time.Now().Format(time.RFC850))
-
-	influxDBData := influxDBStruct2{}
-	influxDBData.Columns = [9]string{"City", "Humidity", "Pressure", "Temperature", "WindSpeed", "WindDegree", "Sunrise", "Sunset"}
-
-	pts := [1][9]float64{{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0}}
-
-	for i, d := range pts {
-		influxDBData.Points[0][i] = interface{}(d)
-	}
-
-	influxDBData.Serie = "OpenWeather"
-
-	influxDBData.Points[0][0] = oneOpenWeather.GetCity()
-	influxDBData.Points[0][1] = oneOpenWeather.GetHumidity()
-	influxDBData.Points[0][2] = oneOpenWeather.GetPressure()
-	influxDBData.Points[0][3] = oneOpenWeather.GetTemp()
-	influxDBData.Points[0][4] = oneOpenWeather.GetWindSpeed()
-	influxDBData.Points[0][5] = oneOpenWeather.GetWindDeg()
-	influxDBData.Points[0][6] = oneOpenWeather.GetSunrise()
-	influxDBData.Points[0][7] = oneOpenWeather.GetSunset()
-	//influxDBData.Points[0][8] = oneOpenWeather.GetDescription()
-
-	err := sendPost(influxDBData, oneConfig)
-	if err != nil {
-		mylog.Error.Fatal(&influxDBError{err, "Error sent Data to Influx DB"})
-	}
-
-}
-
 func sendPost(influxDBData interface{}, oneConfig config.ConfigStructure) (err error) {
 	data, _ := json.Marshal(influxDBData)
 
@@ -122,7 +84,7 @@ func createDB(oneConfig config.ConfigStructure) error {
 
 	nestDB := createDB{}
 	fullURL := fmt.Sprint("http://", oneConfig.InfluxDBServer, ":", oneConfig.InfluxDBServerPort, "/db?u=", oneConfig.InfluxDBUsername, "&p=", oneConfig.InfluxDBPassword)
-	nestDB.Name = "nest"
+	nestDB.Name = oneConfig.InfluxDBDatabase
 	data, _ := json.Marshal(nestDB)
 
 	oneRest := rest.MakeNew()
@@ -133,7 +95,7 @@ func createDB(oneConfig config.ConfigStructure) error {
 	return nil
 }
 
-func InitInfluxDB(messagesNest chan nestStructure.NestStructure, messagesOpenWeather chan openweathermap.OpenweatherStruct, oneConfig config.ConfigStructure) {
+func InitInfluxDB(messagesNest chan nestStructure.NestStructure, oneConfig config.ConfigStructure) {
 
 	go func() {
 		mylog.Trace.Println("receive messagesNest  to export InfluxDB")
@@ -143,11 +105,4 @@ func InitInfluxDB(messagesNest chan nestStructure.NestStructure, messagesOpenWea
 		}
 	}()
 
-	go func() {
-		mylog.Trace.Println("receive messagesOpenWeather  to export InfluxDB")
-		for {
-			msg := <-messagesOpenWeather
-			sendOpenWeatherToInfluxDB(msg, oneConfig)
-		}
-	}()
 }

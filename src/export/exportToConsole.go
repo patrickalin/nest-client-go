@@ -2,8 +2,9 @@ package export
 
 import (
 	"fmt"
-	"mylog"
 	"nestStructure"
+
+	mylog "github.com/patrickalin/GoMyLog"
 )
 
 //print major informations from a Nest JSON to console

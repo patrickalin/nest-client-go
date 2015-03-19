@@ -4,8 +4,9 @@ import (
 	"config"
 	"encoding/json"
 	"fmt"
-	"mylog"
-	"rest"
+
+	mylog "github.com/patrickalin/GoMyLog"
+	rest "github.com/patrickalin/GoRest"
 )
 
 // generate by http://mervine.net/json2struct
