@@ -12,9 +12,9 @@ import (
 )
 
 type influxDBStruct struct {
-	Columns [6]string         `json:"columns"`
-	Serie   string            `json:"name"`
-	Points  [1][6]interface{} `json:"points"`
+	Columns []string        `json:"columns"`
+	Serie   string          `json:"name"`
+	Points  [][]interface{} `json:"points"`
 }
 
 type influxDBError struct {
@@ -23,7 +23,7 @@ type influxDBError struct {
 }
 
 func (e *influxDBError) Error() string {
-	return fmt.Sprintf("\n \t InfluxDBError :> %s \n\t InfluxDB Advice:> %s %s %s %s", e.message, e.advice)
+	return fmt.Sprintf("\n \t InfluxDBError :> %s \n\t InfluxDB Advice:> %s", e.message, e.advice)
 }
 
 func sendNestToInfluxDB(oneNest nestStructure.NestStructure, oneConfig config.ConfigStructure) {
@@ -31,16 +31,25 @@ func sendNestToInfluxDB(oneNest nestStructure.NestStructure, oneConfig config.Co
 	fmt.Printf("\n %s :> Send Nest Data to InfluxDB\n", time.Now().Format(time.RFC850))
 
 	influxDBData := influxDBStruct{}
-	influxDBData.Columns = [6]string{"TargetTemperature", "AmbientTemperature", "Humidity", "Version", "Status", "Running"}
 
-	pts := [1][6]float64{{0.0, 0.0, 0.0, 0.0, 0.0, 0.0}}
-
-	for i, d := range pts {
-		influxDBData.Points[0][i] = interface{}(d)
+	//init colomn Name
+	influxDBData.Columns = make([]string, 6)
+	dataColumls := [6]string{"TargetTemperature", "AmbientTemperature", "Humidity", "Version", "Status", "Running"}
+	for i := range dataColumls {
+		influxDBData.Columns[i] = dataColumls[i]
 	}
 
-	influxDBData.Serie = "NestData"
+	//init array
+	influxDBData.Points = make([][]interface{}, 1)
+	for i := range influxDBData.Points {
+		influxDBData.Points[i] = make([]interface{}, 6)
+	}
+	for i := range influxDBData.Points[0] {
+		influxDBData.Points[0][i] = 0.0
+	}
 
+	//push data
+	influxDBData.Serie = "NestData"
 	influxDBData.Points[0][0] = oneNest.GetTargetTemperatureC()
 	influxDBData.Points[0][1] = oneNest.GetAmbientTemperatureC()
 	influxDBData.Points[0][2] = oneNest.GetHumidity()
@@ -90,7 +99,7 @@ func createDB(oneConfig config.ConfigStructure) error {
 	oneRest := rest.MakeNew()
 	err := oneRest.PostJSON(fullURL, data)
 	if err != nil {
-		return &influxDBError{err, "Error with Post : create database Nest"}
+		return &influxDBError{err, "Error with Post : Create database Nest, check if InfluxDB is running"}
 	}
 	return nil
 }
@@ -98,7 +107,7 @@ func createDB(oneConfig config.ConfigStructure) error {
 func InitInfluxDB(messagesNest chan nestStructure.NestStructure, oneConfig config.ConfigStructure) {
 
 	go func() {
-		mylog.Trace.Println("receive messagesNest  to export InfluxDB")
+		mylog.Trace.Println("Receive messagesNest to export InfluxDB")
 		for {
 			msg := <-messagesNest
 			sendNestToInfluxDB(msg, oneConfig)

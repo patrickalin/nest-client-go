@@ -45,8 +45,6 @@ func main() {
 		myConfig.LogLevel = *debug
 	}
 
-	fmt.Println(myConfig.LogLevel)
-
 	level, _ := strconv.Atoi(myConfig.LogLevel)
 	mylog.Init(mylog.Level(level))
 
