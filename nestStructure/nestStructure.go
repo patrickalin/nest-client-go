@@ -1,9 +1,10 @@
 package nestStructure
 
 import (
-	"config"
 	"encoding/json"
 	"fmt"
+
+	config "github.com/patrickalin/GoNestThermostatAPIRest/config"
 
 	mylog "github.com/patrickalin/GoMyLog"
 	rest "github.com/patrickalin/GoRest"
@@ -14,37 +15,7 @@ import (
 type nestStructure struct {
 	Devices struct {
 		Thermostats struct {
-			ThermostatID struct {
-				AmbientTemperatureC    float64 `json:"ambient_temperature_c"`
-				AmbientTemperatureF    float64 `json:"ambient_temperature_f"`
-				AwayTemperatureHighC   float64 `json:"away_temperature_high_c"`
-				AwayTemperatureHighF   float64 `json:"away_temperature_high_f"`
-				AwayTemperatureLowC    float64 `json:"away_temperature_low_c"`
-				AwayTemperatureLowF    float64 `json:"away_temperature_low_f"`
-				CanCool                bool    `json:"can_cool"`
-				CanHeat                bool    `json:"can_heat"`
-				DeviceID               string  `json:"device_id"`
-				FanTimerActive         bool    `json:"fan_timer_active"`
-				HasFan                 bool    `json:"has_fan"`
-				HasLeaf                bool    `json:"has_leaf"`
-				Humidity               float64 `json:"humidity"`
-				HvacMode               string  `json:"hvac_mode"`
-				IsOnline               bool    `json:"is_online"`
-				IsUsingEmergencyHeat   bool    `json:"is_using_emergency_heat"`
-				LastConnection         string  `json:"last_connection"`
-				Locale                 string  `json:"locale"`
-				Name                   string  `json:"name"`
-				NameLong               string  `json:"name_long"`
-				SoftwareVersion        string  `json:"software_version"`
-				StructureID            string  `json:"structure_id"`
-				TargetTemperatureC     float64 `json:"target_temperature_c"`
-				TargetTemperatureF     float64 `json:"target_temperature_f"`
-				TargetTemperatureHighC float64 `json:"target_temperature_high_c"`
-				TargetTemperatureHighF float64 `json:"target_temperature_high_f"`
-				TargetTemperatureLowC  float64 `json:"target_temperature_low_c"`
-				TargetTemperatureLowF  float64 `json:"target_temperature_low_f"`
-				TemperatureScale       string  `json:"temperature_scale"`
-			} `json:"oJHB1ha6NGOT9493h-fcJY--gS80WzmN"`
+			ThermostatID ThermostatID `json:"oJHB1ha6NGOT9493h-fcJY--gS80WzmN"`
 		} `json:"thermostats"`
 	} `json:"devices"`
 	Metadata struct {
@@ -62,8 +33,47 @@ type nestStructure struct {
 	} `json:"structures"`
 }
 
+type ThermostatID struct {
+	AmbientTemperatureC    float64 `json:"ambient_temperature_c"`
+	AmbientTemperatureF    float64 `json:"ambient_temperature_f"`
+	AwayTemperatureHighC   float64 `json:"away_temperature_high_c"`
+	AwayTemperatureHighF   float64 `json:"away_temperature_high_f"`
+	AwayTemperatureLowC    float64 `json:"away_temperature_low_c"`
+	AwayTemperatureLowF    float64 `json:"away_temperature_low_f"`
+	CanCool                bool    `json:"can_cool"`
+	CanHeat                bool    `json:"can_heat"`
+	DeviceID               string  `json:"device_id"`
+	FanTimerActive         bool    `json:"fan_timer_active"`
+	HasFan                 bool    `json:"has_fan"`
+	HasLeaf                bool    `json:"has_leaf"`
+	Humidity               float64 `json:"humidity"`
+	HvacMode               string  `json:"hvac_mode"`
+	IsOnline               bool    `json:"is_online"`
+	IsUsingEmergencyHeat   bool    `json:"is_using_emergency_heat"`
+	LastConnection         string  `json:"last_connection"`
+	Locale                 string  `json:"locale"`
+	Name                   string  `json:"name"`
+	NameLong               string  `json:"name_long"`
+	SoftwareVersion        string  `json:"software_version"`
+	StructureID            string  `json:"structure_id"`
+	TargetTemperatureC     float64 `json:"target_temperature_c"`
+	TargetTemperatureF     float64 `json:"target_temperature_f"`
+	TargetTemperatureHighC float64 `json:"target_temperature_high_c"`
+	TargetTemperatureHighF float64 `json:"target_temperature_high_f"`
+	TargetTemperatureLowC  float64 `json:"target_temperature_low_c"`
+	TargetTemperatureLowF  float64 `json:"target_temperature_low_f"`
+	TemperatureScale       string  `json:"temperature_scale"`
+}
+
+type nestStructureShort struct {
+	Devices struct {
+		thermostats interface{} `json:"thermostats"`
+	} `json:"devices"`
+}
+
+// NestStructure is the Interface NestStructure
 type NestStructure interface {
-	GetDeviceId() string
+	GetDeviceID() string
 	GetSoftwareVersion() string
 	GetAmbientTemperatureC() float64
 	GetTargetTemperatureC() float64
@@ -90,10 +100,20 @@ func (nestInfo nestStructure) ShowPrettyAll() int {
 		mylog.Error.Fatal(err)
 	}
 	mylog.Trace.Printf("Decode:> \n %s \n\n", out)
-	return 2
+	return 0
 }
 
-func (nestInfo nestStructure) GetDeviceId() string {
+func (nestInfo nestStructureShort) ShowPrettyAll() int {
+	out, err := json.Marshal(nestInfo)
+	if err != nil {
+		fmt.Println("Error with parsing Json")
+		mylog.Error.Fatal(err)
+	}
+	mylog.Trace.Printf("Decode:> \n %s \n\n", out)
+	return 0
+}
+
+func (nestInfo nestStructure) GetDeviceID() string {
 	return nestInfo.Devices.Thermostats.ThermostatID.DeviceID
 }
 
@@ -125,6 +145,7 @@ func (nestInfo nestStructure) GetAway() string {
 	return nestInfo.Structures.StructureID.Away
 }
 
+// MakeNew calls Nest and get structureNest
 func MakeNew(oneConfig config.ConfigStructure) NestStructure {
 
 	// get body from Rest API
@@ -136,13 +157,23 @@ func MakeNew(oneConfig config.ConfigStructure) NestStructure {
 	}
 
 	var nestInfo nestStructure
+	var nestInfoShort nestStructureShort
+
 	body := myRest.GetBody()
 
 	err = json.Unmarshal(body, &nestInfo)
+	err = json.Unmarshal(body, &nestInfoShort)
 	if err != nil {
 		mylog.Error.Fatal(&nestError{err, "Problem with json to struct, problem in the struct ?"})
 	}
 
+	fmt.Println(nestInfoShort.Devices.thermostats)
+	fmt.Println(nestInfoShort.Devices)
+
+	nestInfoShort.ShowPrettyAll()
+
+	fmt.Println(nestInfo.Devices.Thermostats)
+	fmt.Println(nestInfo.Devices)
 	nestInfo.ShowPrettyAll()
 
 	return nestInfo

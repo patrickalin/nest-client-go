@@ -1,13 +1,14 @@
 package main
 
 import (
-	"config"
-	"export"
 	"flag"
 	"fmt"
-	"nestStructure"
 	"strconv"
 	"time"
+
+	config "github.com/patrickalin/GoNestThermostatAPIRest/config"
+	export "github.com/patrickalin/GoNestThermostatAPIRest/export"
+	nestStructure "github.com/patrickalin/GoNestThermostatAPIRest/nestStructure"
 
 	mylog "github.com/patrickalin/GoMyLog"
 )
@@ -34,7 +35,7 @@ func main() {
 
 	flag.Parse()
 
-	fmt.Printf("\n %s :> Nest Thermostat Go Call\n\n", time.Now().Format(time.RFC850))
+	fmt.Printf("\n %s :> Nest Thermostat API in Go\n", time.Now().Format(time.RFC850))
 
 	mylog.Init(mylog.ERROR)
 
@@ -82,7 +83,7 @@ func repeat() {
 	myNest := nestStructure.MakeNew(myConfig)
 
 	go func() {
-		// display major informations to console or to influx DB
+		// display major informations to console
 
 		if myConfig.ConsoleActivated == "true" {
 			nestMessageToConsole <- myNest

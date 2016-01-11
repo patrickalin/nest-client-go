@@ -45,6 +45,8 @@ type Config interface {
 
 func (configInfo ConfigStructure) ReadConfig(configName string) ConfigStructure {
 	viper.SetConfigName(configName)
+	viper.AddConfigPath(".")
+	viper.AddConfigPath("./config/")
 
 	dir, err := filepath.Abs(filepath.Dir(os.Args[0]))
 	if err != nil {
