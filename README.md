@@ -41,9 +41,8 @@ You can display the result with Grafana
 
 ![Grafana Image ](https://github.com/patrickalin/GoNestThermostatAPIRest/blob/master/img/Grafana.png)
 
-#Put data from OpenWeather in InfluxDB
-
-![OpenWeather Image ](https://github.com/patrickalin/GoNestThermostatAPIRest/blob/master/img/OpenWeather.png)
+If you want I have a similar code for openweather to save the temperature of you location.
+[GoOpenWeatherToInfluxDB](https://github.com/patrickalin/GoOpenWeatherToInfluxDB)
 
 #Pre installation
 
