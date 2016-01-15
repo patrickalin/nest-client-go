@@ -15,22 +15,34 @@ import (
 type nestStructure struct {
 	Devices struct {
 		Thermostats struct {
-			ThermostatID ThermostatID `json:"oJHB1ha6NGOT9493h-fcJY--gS80WzmN"`
+			ThermostatID ThermostatID `json:"noNeeded"`
 		} `json:"thermostats"`
 	} `json:"devices"`
-	Metadata struct {
-		AccessToken   string  `json:"access_token"`
-		ClientVersion float64 `json:"client_version"`
-	} `json:"metadata"`
+	Metadata   Metadata `json:"metadata"`
 	Structures struct {
-		StructureID struct {
-			Away        string   `json:"away"`
-			CountryCode string   `json:"country_code"`
-			Name        string   `json:"name"`
-			StructureID string   `json:"structure_id"`
-			Thermostats []string `json:"thermostats"`
-		} `json:"Nhae1XUqlNalBQ82Pfqf6NEt8rObgjPJgNJyoSL6iahQ92AblzZVZw"`
+		StructureID StructureID `json:"noNeeded"`
 	} `json:"structures"`
+}
+
+type nestStructureShort struct {
+	Devices struct {
+		Thermostats interface{} `json:"thermostats"`
+	} `json:"devices"`
+	Metadata   Metadata    `json:"metadata"`
+	Structures interface{} `json:"structures"`
+}
+
+type StructureID struct {
+	Away        string   `json:"away"`
+	CountryCode string   `json:"country_code"`
+	Name        string   `json:"name"`
+	StructureID string   `json:"structure_id"`
+	Thermostats []string `json:"thermostats"`
+}
+
+type Metadata struct {
+	AccessToken   string  `json:"access_token"`
+	ClientVersion float64 `json:"client_version"`
 }
 
 type ThermostatID struct {
@@ -63,12 +75,6 @@ type ThermostatID struct {
 	TargetTemperatureLowC  float64 `json:"target_temperature_low_c"`
 	TargetTemperatureLowF  float64 `json:"target_temperature_low_f"`
 	TemperatureScale       string  `json:"temperature_scale"`
-}
-
-type nestStructureShort struct {
-	Devices struct {
-		thermostats interface{} `json:"thermostats"`
-	} `json:"devices"`
 }
 
 // NestStructure is the Interface NestStructure
@@ -161,19 +167,40 @@ func MakeNew(oneConfig config.ConfigStructure) NestStructure {
 
 	body := myRest.GetBody()
 
-	err = json.Unmarshal(body, &nestInfo)
+	//err = json.Unmarshal(body, &nestInfo)
 	err = json.Unmarshal(body, &nestInfoShort)
+
 	if err != nil {
 		mylog.Error.Fatal(&nestError{err, "Problem with json to struct, problem in the struct ?"})
 	}
 
-	fmt.Println(nestInfoShort.Devices.thermostats)
-	fmt.Println(nestInfoShort.Devices)
+	// not prety but works, one uid is use in the structure nest but I don't like that
+	// so I found a work around
+	listThermostatsInterface := nestInfoShort.Devices.Thermostats
+	listThermostatsMaps := listThermostatsInterface.(map[string]interface{})
 
-	nestInfoShort.ShowPrettyAll()
+	var oneThermostat ThermostatID
 
-	fmt.Println(nestInfo.Devices.Thermostats)
-	fmt.Println(nestInfo.Devices)
+	for _, value := range listThermostatsMaps {
+		jsonString, _ := json.Marshal(value)
+		json.Unmarshal(jsonString, &oneThermostat)
+		nestInfo.Devices.Thermostats.ThermostatID = oneThermostat
+	}
+
+	listStructuresInterface := nestInfoShort.Structures
+	listStructuresMaps := listStructuresInterface.(map[string]interface{})
+
+	var oneStructure StructureID
+
+	for _, value := range listStructuresMaps {
+		jsonString, _ := json.Marshal(value)
+		json.Unmarshal(jsonString, &oneStructure)
+		nestInfo.Structures.StructureID = oneStructure
+	}
+
+	nestInfo.Metadata = nestInfoShort.Metadata
+	// not prety but works end
+
 	nestInfo.ShowPrettyAll()
 
 	return nestInfo
