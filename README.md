@@ -33,7 +33,11 @@ This code execute a call to the Nest API Thermostat in Go (Golang).
 
 ![InfluxDB Image ](https://github.com/patrickalin/GoNestThermostatAPIRest/blob/master/img/InfluxDB.png)
 
-After, you can display the result with Grafana
+You can display the result with Chronograph
+
+![InfluxDB Image ](https://github.com/patrickalin/GoNestThermostatAPIRest/blob/master/img/Chronograph.png)
+
+You can display the result with Grafana
 
 ![Grafana Image ](https://github.com/patrickalin/GoNestThermostatAPIRest/blob/master/img/Grafana.png)
 
