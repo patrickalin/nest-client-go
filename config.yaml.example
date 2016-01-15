@@ -1,0 +1,20 @@
+---
+######## Params influxDB necessary if true
+  influxDB_activated: "true"
+  influxDB_server: "localhost"
+  influxDB_server_port: "8086"
+  influxDB_username: "root"
+  influxDB_password: "root"
+  influxDB_database: "nest"
+######## If true display informations on console
+  console_activated: "true"
+######## Refresh time, be not to small because you are blocked by openweather
+  refresh_timer: "60"
+######## Params for nest
+# Normally don't change
+  nest_url: "https://developer-api.nest.com/?auth="
+# the key, it's free : http://developer-api.nest.com
+  nest_access_token: "c.557tobecompleted"
+# 1 info  -> 4 trace
+  log_level: 1
+#########

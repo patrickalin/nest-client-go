@@ -1,6 +1,7 @@
 bin/GoNestThermostatAPIRest
 bin/
 config.json
+config.yaml
 src/github.com/
 src/golang.org/
 src/gopkg.in/
