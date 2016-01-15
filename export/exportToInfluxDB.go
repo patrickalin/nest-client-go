@@ -86,8 +86,6 @@ func createDB(oneConfig config.ConfigStructure) error {
 }
 
 func makeClient(oneConfig config.ConfigStructure) (client clientinfluxdb.Client, err error) {
-	fmt.Println("Create Client InfluxDB")
-
 	client, err = clientinfluxdb.NewHTTPClient(
 		clientinfluxdb.HTTPConfig{
 			Addr:     fmt.Sprintf("http://%s:%s", oneConfig.InfluxDBServer, oneConfig.InfluxDBServerPort),
@@ -98,7 +96,6 @@ func makeClient(oneConfig config.ConfigStructure) (client clientinfluxdb.Client,
 	if err != nil || client == nil {
 		return nil, &influxDBError{err, "Error with creating InfluxDB Client : , check if InfluxDB is running"}
 	}
-	fmt.Println("Client created")
 	return client, nil
 }
 
