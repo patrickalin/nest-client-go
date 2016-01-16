@@ -9,18 +9,19 @@ import (
 	viper "github.com/spf13/viper"
 )
 
-const nest_url = "nest_url"
-const nest_access_token = "nest_access_token"
-const influxDB_database = "influxDB_database"
-const influxDB_password = "influxDB_password"
-const influxDB_server = "influxDB_server"
-const influxDB_server_port = "influxDB_server_port"
-const influxDB_username = "influxDB_username"
-const console_activated = "console_activated"
-const influxDB_activated = "influxDB_activated"
-const refresh_timer = "refresh_timer"
-const log_level = "log_level"
+const nestURL = "nest_url"
+const nestAccessToken = "nest_access_token"
+const influxDBDatabase = "influxDB_database"
+const influxDBPassword = "influxDB_password"
+const influxDBServer = "influxDB_server"
+const influxDBServerPort = "influxDB_server_port"
+const influxDBUsername = "influxDB_username"
+const consoleActivated = "console_activated"
+const influxDBActivated = "influxDB_activated"
+const refreshTimer = "refresh_timer"
+const logLevel = "log_level"
 
+//ConfigStructure is the structure of the config YAML file
 //use http://mervine.net/json2struct
 type ConfigStructure struct {
 	ConsoleActivated   string `json:"console_activated"`
@@ -36,13 +37,13 @@ type ConfigStructure struct {
 	RefreshTimer       string `json:"refresh_timer"`
 }
 
+//Config GetURL return the URL from the config file
 type Config interface {
 	GetURL() string
 }
 
-// read config from config.json
+// ReadConfig read config from config.json
 // with the package viper
-
 func (configInfo ConfigStructure) ReadConfig(configName string) ConfigStructure {
 	viper.SetConfigName(configName)
 	viper.AddConfigPath(".")
@@ -53,7 +54,7 @@ func (configInfo ConfigStructure) ReadConfig(configName string) ConfigStructure 
 		mylog.Error.Fatal(err)
 	}
 
-	mylog.Trace.Print("The config file loaded is :> %s/%s \n \n", dir, configName)
+	mylog.Trace.Printf("The config file loaded is :> %s/%s \n \n", dir, configName)
 
 	dir = dir + "/" + configName
 
@@ -63,73 +64,78 @@ func (configInfo ConfigStructure) ReadConfig(configName string) ConfigStructure 
 		mylog.Error.Fatal(err)
 	}
 
-	configInfo.NestURL = viper.GetString(nest_url)
+	configInfo.NestURL = viper.GetString(nestURL)
 	if configInfo.NestURL == "" {
-		mylog.Error.Fatal("Check if the key :> " + nest_url + " is present in the file " + dir)
+		mylog.Error.Fatal("Check if the key :> " + nestURL + " is present in the file " + dir)
 	}
 
-	configInfo.NestAccessToken = viper.GetString(nest_access_token)
-	if configInfo.NestURL == "" {
-		mylog.Error.Fatal("Check if the key :> " + nest_access_token + " is present in the file " + dir)
+	configInfo.NestAccessToken = os.Getenv("nest_secretid")
+	if configInfo.NestAccessToken == "" {
+		configInfo.NestAccessToken = viper.GetString(nestAccessToken)
+		if configInfo.NestURL == "" {
+			mylog.Error.Fatal("Check if the key :> " + nestAccessToken + " is present in the file " + dir)
+		}
 	}
 
 	configInfo.NestURL += configInfo.NestAccessToken
 	mylog.Trace.Printf("Your URL from config file :> %s \n\n", configInfo.NestURL)
 
-	configInfo.InfluxDBDatabase = viper.GetString(influxDB_database)
+	configInfo.InfluxDBDatabase = viper.GetString(influxDBDatabase)
 	if configInfo.InfluxDBDatabase == "" {
-		mylog.Error.Fatal("Check if the key " + influxDB_database + " is present in the file " + dir)
+		mylog.Error.Fatal("Check if the key " + influxDBDatabase + " is present in the file " + dir)
 	}
 
-	configInfo.InfluxDBPassword = viper.GetString(influxDB_password)
+	configInfo.InfluxDBPassword = viper.GetString(influxDBPassword)
 	if configInfo.InfluxDBPassword == "" {
-		mylog.Error.Fatal("Check if the key " + influxDB_password + " is present in the file " + dir)
+		mylog.Error.Fatal("Check if the key " + influxDBPassword + " is present in the file " + dir)
 	}
 
-	configInfo.InfluxDBServer = viper.GetString(influxDB_server)
+	configInfo.InfluxDBServer = viper.GetString(influxDBServer)
 	if configInfo.InfluxDBServer == "" {
-		mylog.Error.Fatal("Check if the key " + influxDB_server + " is present in the file " + dir)
+		mylog.Error.Fatal("Check if the key " + influxDBServer + " is present in the file " + dir)
 	}
 
-	configInfo.InfluxDBServerPort = viper.GetString(influxDB_server_port)
+	configInfo.InfluxDBServerPort = viper.GetString(influxDBServerPort)
 	if configInfo.InfluxDBServerPort == "" {
-		mylog.Error.Fatal("Check if the key " + influxDB_server_port + " is present in the file " + dir)
+		mylog.Error.Fatal("Check if the key " + influxDBServerPort + " is present in the file " + dir)
 	}
 
-	configInfo.InfluxDBUsername = viper.GetString(influxDB_username)
+	configInfo.InfluxDBUsername = viper.GetString(influxDBUsername)
 	if configInfo.InfluxDBUsername == "" {
-		mylog.Error.Fatal("Check if the key " + influxDB_username + " is present in the file " + dir)
+		mylog.Error.Fatal("Check if the key " + influxDBUsername + " is present in the file " + dir)
 	}
 
-	configInfo.ConsoleActivated = viper.GetString(console_activated)
+	configInfo.ConsoleActivated = viper.GetString(consoleActivated)
 	if configInfo.ConsoleActivated == "" {
-		mylog.Error.Fatal("Check if the key " + console_activated + " is present in the file " + dir)
+		mylog.Error.Fatal("Check if the key " + consoleActivated + " is present in the file " + dir)
 	}
 
-	configInfo.InfluxDBActivated = viper.GetString(influxDB_activated)
+	configInfo.InfluxDBActivated = viper.GetString(influxDBActivated)
 	if configInfo.InfluxDBActivated == "" {
-		mylog.Error.Fatal("Check if the key " + influxDB_activated + " is present in the file " + dir)
+		mylog.Error.Fatal("Check if the key " + influxDBActivated + " is present in the file " + dir)
 	}
 
-	configInfo.RefreshTimer = viper.GetString(refresh_timer)
+	configInfo.RefreshTimer = viper.GetString(refreshTimer)
 	if configInfo.RefreshTimer == "" {
-		mylog.Error.Fatal("Check if the key " + refresh_timer + " is present in the file " + dir)
+		mylog.Error.Fatal("Check if the key " + refreshTimer + " is present in the file " + dir)
 	}
 
-	configInfo.LogLevel = viper.GetString(log_level)
+	configInfo.LogLevel = viper.GetString(logLevel)
 	if configInfo.LogLevel == "" {
-		mylog.Error.Fatal("Check if the key " + log_level + " is present in the file " + dir)
+		mylog.Error.Fatal("Check if the key " + logLevel + " is present in the file " + dir)
 	}
 
 	return configInfo
 }
 
+//New create the configStructure and fill in
 func New(configName string) ConfigStructure {
 	var configInfo ConfigStructure
 	configInfo = configInfo.ReadConfig(configName)
 	return configInfo
 }
 
+// GetURL return nestURL
 func (configInfo ConfigStructure) GetURL() string {
 	return configInfo.NestURL
 }
