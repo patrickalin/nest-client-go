@@ -17,8 +17,11 @@ import (
 Get Nest Thermostat Information
 */
 
-//name of the config file
+//configName name of the config file
 const configName = "config"
+
+//VERSION version of the code
+const VERSION = "0.1"
 
 var (
 	nestMessageToConsole  = make(chan nestStructure.NestStructure)
@@ -35,7 +38,7 @@ func main() {
 
 	flag.Parse()
 
-	fmt.Printf("\n %s :> Nest Thermostat API in Go\n", time.Now().Format(time.RFC850))
+	fmt.Printf("\n %s :> Nest Thermostat API %s in Go\n", time.Now().Format(time.RFC850), VERSION)
 
 	mylog.Init(mylog.ERROR)
 
