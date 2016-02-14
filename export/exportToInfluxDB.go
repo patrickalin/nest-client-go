@@ -7,7 +7,7 @@ import (
 	config "github.com/patrickalin/GoNestThermostatAPIRest/config"
 	nestStructure "github.com/patrickalin/GoNestThermostatAPIRest/nestStructure"
 
-	clientinfluxdb "github.com/influxdb/influxdb/client/v2"
+	clientinfluxdb "github.com/influxdata/influxdb/client/v2"
 
 	mylog "github.com/patrickalin/GoMyLog"
 )
