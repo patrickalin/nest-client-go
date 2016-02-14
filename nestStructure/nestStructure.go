@@ -3,6 +3,7 @@ package nestStructure
 import (
 	"encoding/json"
 	"fmt"
+	"time"
 
 	config "github.com/patrickalin/GoNestThermostatAPIRest/config"
 
@@ -154,9 +155,20 @@ func (nestInfo nestStructure) GetAway() string {
 // MakeNew calls Nest and get structureNest
 func MakeNew(oneConfig config.ConfigStructure) NestStructure {
 
+	var retry = 0
+	var err error
+	var duration = time.Minute * 5
+
 	// get body from Rest API
 	myRest := rest.MakeNew()
-	err := myRest.Get(oneConfig.NestURL)
+	for retry < 5 {
+		err = myRest.Get(oneConfig.NestURL)
+		if err != nil {
+			mylog.Error.Println(&nestError{err, "Problem with call rest, check the URL and the secret ID in the config file"})
+			retry++
+			time.Sleep(duration)
+		}
+	}
 
 	if err != nil {
 		mylog.Error.Fatal(&nestError{err, "Problem with call rest, check the URL and the secret ID in the config file"})

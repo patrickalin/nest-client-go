@@ -81,6 +81,7 @@ func schedule() {
 	}
 }
 
+//principal function which loops
 func repeat() {
 	// get Nest JSON and parse information in Nest Go Structure
 	myNest := nestStructure.MakeNew(myConfig)
