@@ -22,9 +22,11 @@ func displayToConsole(oneNest nestStructure.NestStructure) {
 //InitConsole listen on the chanel
 func InitConsole(messages chan nestStructure.NestStructure) {
 	go func() {
-		mylog.Trace.Println("Receive message to export Console")
+
+		mylog.Trace.Println("Init the queue to receive message to export to console")
 
 		for {
+	                mylog.Trace.Println("Receive message to export to console")		
 			msg := <-messages
 			displayToConsole(msg)
 		}
