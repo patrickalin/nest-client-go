@@ -16,7 +16,7 @@ This code execute a call to the Nest API Thermostat in Go (Golang).
     Away : 	 	 	auto-away
 
 
-     Wednesday, 11-Mar-15 09:15:33 CET :> Send Data to InfluxDB
+     Wednesday, 11-Mar-15 09:15:33 CET :> Send Data to InfluxData
 
     DeviceId : 	 	oJHB1ha6NGOT9493h-fcJY-
     SoftwareVersion : 	4.3.3
@@ -26,7 +26,7 @@ This code execute a call to the Nest API Thermostat in Go (Golang).
     Away : 	 	 	auto-away
 
 
-     Wednesday, 11-Mar-15 09:16:33 CET :> Send Data to InfluxDB
+     Wednesday, 11-Mar-15 09:16:33 CET :> Send Data to InfluxData
 
 
 #Put the result in a influxDatai (ex influxDB).
@@ -77,7 +77,7 @@ To test, execute one time :
 
 4 Modify all paramameters in config.json
 
-- For InfluxDB isntall the software, the program create database "nest"
+- For InfluxData, isntall the software https://influxdata.com/, the Go program create himself the database "nest"
 
 #Execution
 
