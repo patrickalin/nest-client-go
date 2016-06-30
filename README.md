@@ -29,7 +29,7 @@ This code execute a call to the Nest API Thermostat in Go (Golang).
      Wednesday, 11-Mar-15 09:16:33 CET :> Send Data to InfluxDB
 
 
-#Put the result in a influx DB.
+#Put the result in a influxDatai (ex influxDB).
 
 ![InfluxDB Image ](https://github.com/patrickalin/GoNestThermostatAPIRest/blob/master/img/InfluxDB.png)
 
@@ -50,7 +50,7 @@ install git
 
 install go from http://golang.org/
 
-for influxdb, version > 0.9.6
+If you want use influxDate (ex influxDB), version > 0.9.6
 
 #Installation
 
@@ -68,9 +68,11 @@ for influxdb, version > 0.9.6
 
 2 In the config file modify the secret key receive on https://developer.nest.com/
 
+Don't forget to receive a secretCode, it's a POST to developer-api.nest.com not a GET. I lose a lot of time with this error.
+
 To test, execute one time :
 
-    curl -L -X GET -H "Accept: application/json" "https://developer-api.nest.com/?auth=c.557"
+    curl -L -X GET -H "Accept: application/json" "https://developer-api.nest.com/?auth=c.557ToBeCompleted"
     with you key
 
 4 Modify all paramameters in config.json
