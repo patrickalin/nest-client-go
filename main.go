@@ -67,7 +67,7 @@ func main() {
 }
 
 func schedule() {
-	ticker := time.NewTicker(myTime)
+	ticker := time.NewTicker(myTime * time.Second)
 	quit := make(chan struct{})
 	repeat()
 	for {
