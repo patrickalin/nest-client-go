@@ -22,7 +22,7 @@ func displayToConsole(oneNest nestStructure.NestStructure) {
 //InitConsole listen on the chanel
 func InitConsole(messages chan nestStructure.NestStructure) {
 	go func() {
-		mylog.Trace.Println("Receive message  to export Console")
+		mylog.Trace.Println("Receive message to export Console")
 
 		for {
 			msg := <-messages
