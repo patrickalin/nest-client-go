@@ -160,6 +160,7 @@ func MakeNew(oneConfig config.ConfigStructure) NestStructure {
 	var duration = time.Minute * 5
 
 	// get body from Rest API
+        mylog.Trace.Printf("Get from Rest Nest API")
 	myRest := rest.MakeNew()
 	for retry < 5 {
 		err = myRest.Get(oneConfig.NestURL)
@@ -167,6 +168,8 @@ func MakeNew(oneConfig config.ConfigStructure) NestStructure {
 			mylog.Error.Println(&nestError{err, "Problem with call rest, check the URL and the secret ID in the config file"})
 			retry++
 			time.Sleep(duration)
+		}else  {
+			retry=5
 		}
 	}
 
@@ -179,6 +182,7 @@ func MakeNew(oneConfig config.ConfigStructure) NestStructure {
 
 	body := myRest.GetBody()
 
+        mylog.Trace.Printf("Unmarshal the responce")
 	//err = json.Unmarshal(body, &nestInfo)
 	err = json.Unmarshal(body, &nestInfoShort)
 
