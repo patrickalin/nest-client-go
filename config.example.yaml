@@ -8,7 +8,7 @@
   influxDB_database: "nest"
 ######## If true display informations on console
   console_activated: "true"
-######## Refresh time, be not to small because you are blocked by openweather
+######## Refresh time, be not to small because you are blocked by openweather and nest (in second)
   refresh_timer: "60"
 ######## Params for nest
 # Normally don't change
