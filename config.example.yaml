@@ -1,6 +1,6 @@
 ---
 ######## Params influxDB necessary if true
-  influxDB_activated: "true"
+  influxDB_activated: "false"
   influxDB_server: "localhost"
   influxDB_server_port: "8086"
   influxDB_username: "root"
