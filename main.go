@@ -67,7 +67,7 @@ func main() {
 }
 
 func schedule() {
-	ticker := time.NewTicker(myTime * time.Second)
+	ticker := time.NewTicker(myTime)
 	quit := make(chan struct{})
 	repeat()
 	for {
@@ -83,7 +83,7 @@ func schedule() {
 
 //principal function which loops
 func repeat() {
-	mylog.Trace.Println("Repeat actions")
+	mylog.Trace.Println("Repeat actions each Time Variable")
 
         // get Nest JSON and parse information in Nest Go Structure
 	myNest := nestStructure.MakeNew(myConfig)
