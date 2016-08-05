@@ -37,15 +37,23 @@ install git
 
 install go from http://golang.org/
 
-If you want use influxDate (ex influxDB), version > 0.9.6
+If you want use influxData, version > 0.13
 
-#Installation
+#Installation 
 
     git clone https://github.com/patrickalin/GoNestThermostatAPIRest.git
     cd GoNestThermostatAPIRest
     export GOPATH=$PWD
     go get -v .
     go build
+
+#Extra installation influxDB
+
+[InfluxData download](https://influxdata.com/downloads/#influxdb)
+
+Execution
+ 
+    influxd@
 
 #Configuration
 
@@ -78,6 +86,6 @@ In the config file, you can change the log level.
 
 https://github.com/tixu for testing and review
 
-http://mervine.net/json2struct for transform JSON to Go struct
+http://mervine.net/json2struct "transform JSON to Go struct library"
 
-http://github.com/spf13/viper for read config
+http://github.com/spf13/viper "read config library"
