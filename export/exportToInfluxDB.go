@@ -63,14 +63,14 @@ func sendNestToInfluxDB(oneNest nestStructure.NestStructure, oneConfig config.Co
 	if err != nil {
 		err2 := createDB(oneConfig)
 		if err2 != nil {
-			mylog.Error.Fatal(&influxDBError{err, "Error with Post : Check if InfluxDB is running or if the database nest exists"})
+			mylog.Error.Fatal(&influxDBError{err, "Error with Post : Check if InfluxData is running or if the database nest exists"})
 		}
 	}
 
 }
 
 func createDB(oneConfig config.ConfigStructure) error {
-	fmt.Println("Create Database Nest in InfluxDB")
+	fmt.Println("Create Database Nest in InfluxData")
 
 	query := fmt.Sprint("CREATE DATABASE ", oneConfig.InfluxDBDatabase)
 	q := clientinfluxdb.NewQuery(query, "", "")
