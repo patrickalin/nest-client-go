@@ -1,0 +1,31 @@
+---
+# language (en-us, fr)
+  language : en-us
+######## Params for nest
+# Normally don't change
+  nestURL: "https://api.nest.com/api/skydata/"
+# the key, it's free : https://dashboard.nest.com/
+  nestAccessToken: "yourtoken"
+######## Refresh time, be not to small because you are blocked by openweather and nest (in second)
+  refreshTimer: "60"
+######## If true display informations on console
+  consoleActivated: "true"
+  
+######## If true display informations on webpage
+  hTTPActivated: "true"
+  hTTPPort : ":1111"
+######## Params influxDB necessary if true
+  influxDBActivated: "true"
+  influxDBServer: "localhost"
+  influxDBServerPort: "8086"
+  influxDBUsername: "root"
+  influxDBPassword: "root"
+  influxDBDatabase: "nest"
+######## Expert
+# 1 info  -> 4 trace
+  logLevel: 4
+# to use the code in offline mode put mock: true
+  mock: false
+# use template, static file in folder not in bundled
+  dev: false
+#########
