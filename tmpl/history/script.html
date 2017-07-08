@@ -1,0 +1,196 @@
+{{define "script"}}
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+<script type="text/javascript">
+    var humidity
+    var arrayTemp = [
+        [new Date(1416013200000), 22],
+    ]
+
+    window.addEventListener("load", function(evt) {
+        var output = document.getElementById("output");
+        var ws;
+        var print = function(message) {
+            var d = document.createElement("div");
+            d.innerHTML = message;
+            output.appendChild(d);
+        };
+        socket = new WebSocket("{{.Websockerurl}}");
+        //ON OPEN
+        socket.onopen = function(evt) {
+                // print("OPEN");
+                //print(socket.protocol)
+                //print(socket.readyState)
+                //print(socket.url)
+                socket.send("open")
+            }
+            // ON ERROR
+        socket.onerror = function(error) {
+            console.error(error);
+            print(error);
+        };
+        socket.onclose = function(evt) {
+            print("<b>Connection closed.</b>");
+        };
+        // ON MESSAGE
+        socket.onmessage = function(evt) {
+                var currentdate = new Date();
+                var datetime = '{{T "Last Sync"}}: ' + currentdate.getDate() + "/" +
+                    (currentdate.getMonth() + 1) + "/" +
+                    currentdate.getFullYear() + " @ " +
+                    currentdate.getHours() + ":" +
+                    currentdate.getMinutes() + ":" +
+                    currentdate.getSeconds();
+                document.getElementById("refreshtime").innerHTML = datetime;
+
+                //To show the data 
+
+                str = evt.data.split("SEPARATOR");
+
+                humidity = JSON.parse(str[0]).Data.Humidity;
+
+                drawHumidityPercentage();
+
+                arrayTemp = eval(str[1])
+
+                drawTemperature();
+
+                arrayWind = eval(str[2])
+
+                drawWind();
+            } //end on message
+
+    });
+
+
+    //CHARTS
+
+    google.charts.load('current', {
+        packages: ['corechart', 'line']
+    });
+    google.charts.setOnLoadCallback(drawTemperature);
+    google.charts.setOnLoadCallback(drawHumidityPercentage);
+
+
+    function drawHumidityPercentage() {
+
+        // Define the chart to be drawn.
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Element');
+        data.addColumn('number', 'Percentage');
+        data.addRows([
+            ['Humidity', humidity],
+            ['_', 100 - humidity],
+        ]);
+
+        // Instantiate and draw the chart.
+        var chartHumidy = new google.visualization.PieChart(document.getElementById('humidityChart'));
+        chartHumidy.draw(data, null);
+    }
+
+    function drawTemperature() {
+
+        var data = new google.visualization.DataTable();
+        data.addColumn('date', 'X');
+        data.addColumn('number', 'Temperature');
+
+        data.addRows(arrayTemp);
+
+        var options = {
+            hAxis: {
+                title: 'Time',
+                format: 'H:m',
+                minValue: new Date(2014, 10, 14, 21, 30),
+                maxValue: new Date(2014, 10, 15, 1, 30),
+                gridlines: {
+                    count: -1,
+                    units: {
+                        days: {
+                            format: ['MMM dd']
+                        },
+                        hours: {
+                            format: ['HH:mm', 'ha']
+                        },
+                    }
+                },
+                minorGridlines: {
+                    units: {
+                        hours: {
+                            format: ['hh:mm:ss a', 'ha']
+                        },
+                        minutes: {
+                            format: ['HH:mm a Z', ':mm']
+                        }
+                    }
+                }
+            },
+            vAxis: {
+                title: 'Temperature',
+                format: '#,##°C',
+                maxValue: 27,
+                minValue: -5   
+            },
+            dateFormat: 'MM.dd hh:mm',
+            pointSize: 10,
+            pointShape: 'triangle'
+        };
+
+        var chartTemp = new google.visualization.LineChart(document.getElementById('temperatureChart'));
+
+        chartTemp.draw(data, options);
+    }
+
+    function drawWind() {
+
+        var data = new google.visualization.DataTable();
+        data.addColumn('date', 'X');
+        data.addColumn('number', 'Wind');
+
+        data.addRows(arrayWind);
+
+        var options = {
+            hAxis: {
+                title: 'Time',
+                format: 'H:m',
+                minValue: new Date(2014, 10, 14, 21, 30),
+                maxValue: new Date(2014, 10, 15, 1, 30),
+                gridlines: {
+                    count: -1,
+                    units: {
+                        days: {
+                            format: ['MMM dd']
+                        },
+                        hours: {
+                            format: ['HH:mm', 'ha']
+                        },
+                    }
+                },
+                minorGridlines: {
+                    units: {
+                        hours: {
+                            format: ['hh:mm:ss a', 'ha']
+                        },
+                        minutes: {
+                            format: ['HH:mm a Z', ':mm']
+                        }
+                    }
+                }
+            },
+            vAxis: {
+                title: 'Wind',
+                format: '#,##km/h',
+                maxValue: 100,
+                minValue: 0   
+            },
+            dateFormat: 'MM.dd hh:mm',
+            pointSize: 10,
+            pointShape: 'triangle'
+        };
+
+        var chartTemp = new google.visualization.LineChart(document.getElementById('windChart'));
+
+        chartTemp.draw(data, options);
+    }
+    
+</script>
+{{ end }}
