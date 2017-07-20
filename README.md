@@ -1,91 +1,133 @@
-# GoNestThermostatAPIRest
-This library execute call to the Nest API Thermostat in Go (Golang). And export information in the console or in in Time Series Database InfluxData.
+# Nest Client in Go
 
-#Example : result in the standard console.
+[![Build Status](https://travis-ci.org/patrickalin/nest-client-go.svg?branch=master)](https://travis-ci.org/patrickalin/nest-client-go)
+![Build size](https://reposs.herokuapp.com/?path=patrickalin/nest-client-go)
+[![Go Report Card](https://goreportcard.com/badge/github.com/patrickalin/nest-client-go)](https://goreportcard.com/report/github.com/patrickalin/nest-client-go)
+[![Coverage Status](https://coveralls.io/repos/github/patrickalin/nest-client-go/badge.svg)](https://coveralls.io/github/patrickalin/nest-client-go)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![Join the chat at https://gitter.im/tockins/nest-client-go](https://badges.gitter.im/tockins/nest-client-go.svg)](https://gitter.im/nest-client-go/)
+[![https://img.shields.io/badge/nest-api-go.svg](https://img.shields.io/badge/nest-api-go.svg)](https://github.com/patrickalin/nest-api-go)
 
-     Body :
-     {"devices":{"thermostats":{"oJHB1ha6NGOT9493h-fcJY--":{"humidity":35,"locale":"fr-FR","temperature_scale":"C","is_using_emergency_heat":false,"has_fan":false,"software_version":"4.3.3","has_leaf":false,"device_id":"oJHB1ha6NGOT9493h-fcJY--","name":"Dining Room","can_heat":true,"can_cool":false,"hvac_mode":"heat","target_temperature_c":20.0,"target_temperature_f":68,"target_temperature_high_c":24.0,"target_temperature_high_f":75,"target_temperature_low_c":20.0,"target_temperature_low_f":68,"ambient_temperature_c":20.0,"ambient_temperature_f":68,"away_temperature_high_c":24.0,"away_temperature_high_f":76,"away_temperature_low_c":15.0,"away_temperature_low_f":59,"structure_id":"Nhae1XUqlNalBQ82Pfqf","fan_timer_active":false,"name_long":"Dining Room Thermostat","is_online":true,"last_connection":"2015-03-03T08:56:35.754Z"}}},"structures":{"Nhae1XUqlNalBQ82Pfqf":{"name":"Home","country_code":"BE","away":"home","thermostats":["oJHB1ha6NGOT9493h-fcJY--"],"structure_id":"Nhae1XUqlNalBQ82Pfqf"}},"metadata":{"access_token":"c.","client_version":1}}
+A simple Go client for the Nest API.
 
-     Wednesday, 11-Mar-15 09:15:32 CET :> Nest Thermostat Go Call
+* It's possible to show informations in the console or in a embedded web server.
+* It's also possible to export datas to Time Series Database InfluxData.
 
-    DeviceId : 	 	oJHB1ha6NGOT9493h-fcJY-
-    SoftwareVersion : 	4.3.3
-    Humidity : 	 	45.0
-    AmbientTemperatureC : 	18.5
-    TargetTemperatureC : 	17.0
-    Away : 	 	 	auto-away
+## 1] Getting Started
 
+### Prerequisites
 
-#Example : result in a influxData.
+* Nest API key (get it here: [Nest api](https://dashboard.nest.com/))
 
-![InfluxDB Image ](https://github.com/patrickalin/GoNestThermostatAPIRest/blob/master/img/InfluxDB.png)
+### Installation
 
-You can display the result with Chronograph
+* Download the [binary](https://github.com/patrickalin/nest-client-go/releases) for your OS and the [config.yaml](https://github.com/patrickalin/nest-client-go/blob/master/config.yaml) in the same folder.
 
-![InfluxDB Image ](https://github.com/patrickalin/GoNestThermostatAPIRest/blob/master/img/Chronograph.png)
+### Configuration
 
-You can display the result with Grafana
+* Don't forget !!!! : You have to change the API Key in the config.yaml.
+* Or use flag "-token xxxxxx"
 
-![Grafana Image ](https://github.com/patrickalin/GoNestThermostatAPIRest/blob/master/img/Grafana.png)
+### Traduction
 
-If you want I have a similar code for openweather to save the temperature of you location.
-[GoOpenWeatherToInfluxDB](https://github.com/patrickalin/GoOpenWeatherToInfluxDB)
+* This application supports en-us and fr
+* Cette application supporte l'anglais et le français
 
-#Pre installation
+### Binary donwload with config.yaml
 
-install git
+| Platform| Architecture | URL|
+| ----------| -------- | ------|
+|Apple macOS|64-bit Intel| ./goNest-darwin-amd64.bin |
+|Linux|64-bit Intel| ./goNest-linux-amd64.bin |
+|Windows|64-bit Intel| goNest-windows-amd64.exe |
 
-install go from http://golang.org/
+### Usage with config.yaml or with flag
 
-If you want use influxData, version > 0.13
+Execute the binary with the config file "config.yaml" in the same folder.
 
-#Installation 
+* Ex : goNest-windows-amd64.exe -token xxxxxxx
 
-    git clone https://github.com/patrickalin/GoNestThermostatAPIRest.git
-    cd GoNestThermostatAPIRest
+There are some others flags : --help for doc
+
+      Usage of ./nest-client-go:
+     -debug string
+        panic,fatal,error,warning,info,debug
+     -devel string
+        true,false
+     -mock string
+        true,false
+     -token string
+        yourtoken
+
+### Test using Nest Browser
+
+Nest Clientcomes with an embedded web based object browser. Point your web browser by default to `http://localhost:1111/` ensure your server has started successfully.
+
+![Web server](https://raw.githubusercontent.com/patrickalin/nest-client-go/master/img/webserver.png)
+
+### Example : result in the standard console
+
+    ---------------------
+    Nest 2017-07-20 17:06:21
+    ---------------------
+    Ambien TemperatureC :		27.5
+
+### Example : result in a influxData
+
+![InfluxData Image ](https://raw.githubusercontent.com/patrickalin/nest-client-go/master/img/InfluxDB.png)
+
+## Docker Container
+
+docker pull patrickalin/docker-nest
+docker run -d  --name=nest -e nestAccessToken=ToBECompleted patrickalin/docker-nest
+
+`https://hub.docker.com/r/patrickalin/docker-nest/`
+
+## 2] Modification code / Compilation
+
+### Pre installation
+
+* install git
+* install go from `http://golang.org/`
+* If you want install influxData
+
+### Installation env development
+
+    git clone https://github.com/patrickalin/GonestThermostatAPIRest.git
+    cd GonestThermostatAPIRest
     export GOPATH=$PWD
     go get -v .
     go build
 
-#Extra installation influxDB
+### Mock
 
-[InfluxData download](https://influxdata.com/downloads/#influxdb)
+In the config file, you can activate a mock. If you don't have a API key.
 
-Execution
- 
-    influxd@
+* mock: true
 
-#Configuration
+### Dev
 
-1 You must copy the config.json.example to config.json
+In the config file, you can change the dev mode to use template, lang locally.
 
-    cp config.json.example config.json
+* dev: true
 
-2 In the config file modify the secret key receive on https://developer.nest.com/
+When the dev = false you use assembly files.
+Execute "go generate" to refresh assembly files.
 
-Don't forget to receive a secretCode, it's a POST to developer-api.nest.com not a GET. I lose a lot of time with this error.
+### Debug
 
-To test, execute one time :
+In the config file, you can change the log level (panic,fatal,error,warn,info,debug)
 
-    curl -L -X GET -H "Accept: application/json" "https://developer-api.nest.com/?auth=c.557ToBeCompleted"
-    with you key
+* logLevel: "debug"
 
-4 Modify all paramameters in config.json
+## 3] Thanks
 
-- For InfluxData, isntall the software https://influxdata.com/, the Go program create himself the database "nest"
+<https://github.com/tixu> for testing and review
 
-#Execution
+<http://mervine.net/json2struct> "transform JSON to Go struct library"
 
-    ./GoNestThermostatAPIRest
+<http://github.com/spf13/viper> "read config library"
 
-#Debug
+## 4] License
 
-In the config file, you can change the log level.
-
-#Thanks
-
-https://github.com/tixu for testing and review
-
-http://mervine.net/json2struct "transform JSON to Go struct library"
-
-http://github.com/spf13/viper "read config library"
+The code is licensed under the permissive Apache v2.0 licence. This means you can do what you like with the software, as long as you include the required notices. [Read this](https://tldrlegal.com/license/apache-license-2.0-(apache-2.0)) for a summary.
