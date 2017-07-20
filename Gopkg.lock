@@ -68,16 +68,34 @@
   version = "v1.8.1"
 
 [[projects]]
-  name = "github.com/patrickalin/nest-api-go"
-  packages = [".","assembly"]
-  revision = "b7b927d4e6949def01528d8800d4ffa73efdd367"
-  version = "v0.2"
+  branch = "master"
+  name = "github.com/patrickalin/GoMyLog"
+  packages = ["."]
+  revision = "891edfdddb1485b95693c5fdada2518a24f8c7ee"
+
+[[projects]]
+  name = "github.com/patrickalin/GoNestThermostatAPIRest"
+  packages = ["config","nestStructure"]
+  revision = "6273b73ad19594caf1e7784761245d37031a23e4"
+  version = "v0.1"
+
+[[projects]]
+  name = "github.com/patrickalin/GoRest"
+  packages = ["."]
+  revision = "835847fd2e9e8928d74b44e8edf1fc0aacbc5148"
+  version = "v0.1"
 
 [[projects]]
   name = "github.com/patrickalin/http-go"
   packages = ["."]
   revision = "835847fd2e9e8928d74b44e8edf1fc0aacbc5148"
   version = "v0.1"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/patrickalin/nest-api-go"
+  packages = [".","assembly"]
+  revision = "aeb2c80aab88ac510b90c980087a76defa36df32"
 
 [[projects]]
   name = "github.com/pelletier/go-buffruneio"
@@ -148,6 +166,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "5e90c6740cd89fc0a0cfde8870b3fd4ffd6d8f796453c1537374c67f23990c7b"
+  inputs-digest = "6970aabacf98ac2b4108bfa51b71adf133f081f918112c3270e69f0b9115d5de"
   solver-name = "gps-cdcl"
   solver-version = 1
