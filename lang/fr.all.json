@@ -153,5 +153,20 @@
     "your_unread_email_count": {
         "one": "You have {{.Count}} unread emails.",
         "other": "You have {{.Count}} unread emails."
+    },
+    "Software Version": {
+        "other": "Version du software"
+    },
+    "Ambient TemperatureC": {
+        "other": "Temperature ambiante"
+    },
+    "Target TemperatureC": {
+        "other": "Temperature cible"
+    },
+    "Away / home": {
+        "other": "Parti / Maison"
+    },
+    "home": {
+        "other": "maison"
     }
 }

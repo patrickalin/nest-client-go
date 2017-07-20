@@ -2,5 +2,10 @@
 ---------------------
 Nest {{.GetLastCall}}
 ---------------------
-{{T "Ambien TemperatureC"}} :		{{.GetAmbientTemperatureC}}
+{{T "Device Id"}} :		        {{.GetDeviceID}}
+{{T "Software Version"}} :		{{.GetSoftwareVersion}}
+{{T "Ambient TemperatureC"}} :		{{.GetAmbientTemperatureC}}°C
+{{T "Target TemperatureC"}} :		{{.GetTargetTemperatureC}}°C
+{{T "Humidity"}} :		        {{.GetHumidity}}%
+{{T "Away / home"}} :	        	{{.GetAway}}
 
