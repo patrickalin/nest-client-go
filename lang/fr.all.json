@@ -160,6 +160,12 @@
     "Ambient TemperatureC": {
         "other": "Temperature ambiante"
     },
+    "Away Temperature High C": {
+        "other": "Temperature absent haute"
+    },
+    "Away Temperature Low C": {
+        "other": "Temperature absent basse"
+    },
     "Target TemperatureC": {
         "other": "Temperature cible"
     },

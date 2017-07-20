@@ -47,7 +47,7 @@
 
                 str = evt.data.split("SEPARATOR");
 
-                humidity = JSON.parse(str[0]).Data.Humidity;
+                humidity = JSON.parse(str[0]).devices.thermostats.noNeeded.humidity;
 
                 drawHumidityPercentage();
 
@@ -128,7 +128,7 @@
                 title: 'Temperature',
                 format: '#,##°C',
                 maxValue: 27,
-                minValue: -5   
+                minValue: -5
             },
             dateFormat: 'MM.dd hh:mm',
             pointSize: 10,
@@ -180,7 +180,7 @@
                 title: 'Wind',
                 format: '#,##km/h',
                 maxValue: 100,
-                minValue: 0   
+                minValue: 0
             },
             dateFormat: 'MM.dd hh:mm',
             pointSize: 10,
@@ -191,6 +191,5 @@
 
         chartTemp.draw(data, options);
     }
-    
 </script>
 {{ end }}

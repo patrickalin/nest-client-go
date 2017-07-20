@@ -5,11 +5,10 @@
             <img src="/static/nest.png" width=60%>
             <p class="lead">{{T "Nest client in Go"}}</p>
             <div id="timestamp"></div>
-            <img src="" alt="Nest img" id="bloomimg0" height="200" width="200">
         </div>
         <!--/.div md3 -->
 
-        <div class="col-md-5">
+        <div class="col-md-6">
 
             <br>
 
@@ -17,101 +16,35 @@
 
             <table class="table table-striped">
                 <tr>
-                    <td><span class="glyphicon glyphicon-map-marker"></span> {{T "City"}}</td>
+                    <td><i class="wi wi-thermometer"></i> {{T "Ambient TemperatureC"}}</td>
                     <td>
-                        <div id="city"></div>
+                        <div id="ambient_temperature_c"></div>
                     </td>
                     <td>
-                        &nbsp;
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <div id="night"></div>
-                    </td>
-                    <td>
-                        &nbsp;
-                    </td>
-                    <td>
-                        &nbsp;
+                        <div id="ambient_temperature_f"></div>
                     </td>
                 </tr>
                 <tr>
-                    <td><i class="wi wi-sunset"></i> {{T "Index UV"}} </td>
+                    <td><i class="wi wi-thermometer"></i> {{T "Away Temperature High C"}}</td>
                     <td>
-                        <div id="uv"></div>
+                        <div id="away_temperature_high_c"></div>
                     </td>
                     <td>
-                        &nbsp;
-                    </td>
-                </tr>
-                <tr>
-                    <td><i class="wi wi-small-craft-advisory"></i> {{T "Wind Direction"}}</td>
-                    <td>
-                        <div id="winddir"></div>
-                    </td>
-                    <td>
-                        &nbsp;
+                        <div id="away_temperature_high_f"></div>
                     </td>
                 </tr>
                 <tr>
-                    <td><i class="wi wi-small-craft-advisory"></i> {{T "Wind Gust"}}</td>
+                    <td><i class="wi wi-thermometer"></i> {{T "Away Temperature Low C"}}</td>
                     <td>
-                        <div id="windgust"></div>
+                        <div id="away_temperature_low_c"></div>
                     </td>
                     <td>
-                        <div id="wingustms"></div>
-                        <div id="wingustkmh"></div>
+                        <div id="away_temperature_low_f"></div>
                     </td>
+
                 </tr>
                 <tr>
-                    <td><i class="wi wi-small-craft-advisory"></i> {{T "Sustained Wind"}}</td>
-                    <td>
-                        <div id="sustwind"></div>
-                    </td>
-                    <td>
-                        <div id="sustwindms"></div>
-                        <div id="sustwindkmh"></div>
-                    </td>
-                </tr>
-                <tr>
-                    <td><i class="wi wi-raindrop"></i> {{T "Rain"}}</td>
-                    <td>
-                        <div id="rain"></div>
-                    </td>
-                    <td>
-                        &nbsp;
-                    </td>
-                </tr>
-                <tr>
-                    <td><i class="wi wi-raindrop"></i> {{T "Rain Daily"}}</td>
-                    <td>
-                        <div id="raindaily"></div>
-                    </td>
-                    <td>
-                        <div id="raindailymm"></div>
-                    </td>
-                </tr>
-                <tr>
-                    <td><i class="wi wi-raindrop"></i> {{T "Rain Rate Last hour"}}</td>
-                    <td>
-                        <div id="rainrate"></div>
-                    </td>
-                    <td>
-                        <div id="rainratemm"></div>
-                    </td>
-                </tr>
-                <tr>
-                    <td><i class="wi wi-thermometer"></i> {{T "Temperature"}}</td>
-                    <td>
-                        <div id="tempf"></div>
-                    </td>
-                    <td>
-                        <div id="tempc"></div>
-                    </td>
-                </tr>
-                <tr>
-                    <td><i class="wi wi-humidity"></i> {{T "Humidity"}} patrikc</td>
+                    <td><i class="wi wi-humidity"></i> {{T "Humidity"}} </td>
                     <td>
                         <div id="humidity"></div>
                     </td>
@@ -120,36 +53,18 @@
                     </td>
                 </tr>
                 <tr>
-                    <td><i class="wi wi-barometer"></i> {{T "Pressure"}}</td>
-                    <td>
-                        <div id="pressureinhg"></div>
-                    </td>
-                    <td>
-                        <div id="pressurehpa"></div>
-                    </td>
-                </tr>
-                <tr>
-                    <td><span class="glyphicon glyphicon-equalizer"></span> Voltage</td>
-                    <td>
-                        <div id="voltage"></div>
-                    </td>
-                    <td>
-                        &nbsp;
-                    </td>
-                </tr>
-                <tr>
-                    <td><span class="glyphicon glyphicon-globe"></span> {{T "Number Of Followers"}}</td>
-                    <td>
-                        <div id="followers"></div>
-                    </td>
-                    <td>
-                        &nbsp;
-                    </td>
-                </tr>
-                <tr>
                     <td><span class="glyphicon glyphicon glyphicon-cog"></span> {{T "Device Id"}}</td>
                     <td>
-                        <div id="device"></div>
+                        <div id="device_id"></div>
+                    </td>
+                    <td>
+                        &nbsp;
+                    </td>
+                </tr>
+                <tr>
+                    <td><span class="glyphicon glyphicon glyphicon-cog"></span> {{T "Software version"}}</td>
+                    <td>
+                        <div id="software_version"></div>
                     </td>
                     <td>
                         &nbsp;
@@ -164,48 +79,6 @@
         </div>
         <!--/.div md3 -->
 
-        <div class="col-md-4">
-            <table class="table table-striped">
-                <tr>
-                    <br>
-                    <div id="formattedTime5"></div>
-                    <video id="vid0" width="320" height="240" controls loop>
-  <source src="" id="bloomvid0" type="video/mp4">Your browser does not support the video tag.
-</video>
-                </tr>
-                <tr>
-                    <br>
-                    <div id="formattedTime4"></div>
-                    <video id="vid1" width="320" height="240" controls loop>
-  <source src="" id="bloomvid1" type="video/mp4">Your browser does not support the video tag.
-</video>
-                </tr>
-                <tr>
-                    <br>
-                    <div id="formattedTime3"></div>
-                    <video id="vid2" width="320" height="240" controls loop>
-  <source src="" id="bloomvid2" type="video/mp4">Your browser does not support the video tag.
-</video>
-                </tr>
-                <tr>
-                    <br>
-                    <div id="formattedTime2"></div>
-                    <video id="vid3" width="320" height="240" controls loop>
-  <source src="" id="bloomvid3" type="video/mp4">Your browser does not support the video tag.
-</video>
-                </tr>
-                <tr>
-                    <br>
-                    <div id="formattedTime1"></div>
-                    <video id="vid4" width="320" height="240" controls loop>
-  <source src="" id="bloomvid4" type="video/mp4">Your browser does not support the video tag.
-</video>
-                </tr>
-            </table>
-
-
-        </div>
-        <!-- /.div md3 -->
     </div>
     <!-- /.row -->
 </div>
