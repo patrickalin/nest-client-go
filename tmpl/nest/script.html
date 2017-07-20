@@ -42,7 +42,8 @@
 
             var json = JSON.parse(evt.data);
             // build date
-            var a = new Date(json.Data.TS * 1000);
+
+            /*var a = new Date(json.Data.TS * 1000);
             var months = ['{{T "Jan"}}', '{{T "Feb"}}', '{{T "Mar"}}', '{{T "Apr"}}', '{{T "May"}}', '{{T "Jun"}}', '{{T "Jul"}}', '{{T "Aug"}}', '{{T "Sep"}}', '{{T "Oct"}}', '{{T "Nov"}}', '{{T "Dec"}}'];
             var year = a.getFullYear();
             var month = months[a.getMonth()];
@@ -168,25 +169,8 @@
             document.getElementById("pressurehpa").innerHTML = json.Data.Pressurehpa + " hPa";
 
             document.getElementById("voltage").innerHTML = json.Data.Voltage + " mV";
+            */
 
-            document.getElementById("bloomimg0").src = json.Data.ImageURL;
-
-            /* document.getElementById("bloomimg1").src = json.PreviewImageList[0];
-             document.getElementById("bloomimg2").src = json.PreviewImageList[1];
-             document.getElementById("bloomimg3").src = json.PreviewImageList[2];
-             document.getElementById("bloomimg4").src = json.PreviewImageList[3];
-             document.getElementById("bloomimg5").src = json.PreviewImageList[4];*/
-
-            document.getElementById("bloomvid0").src = json.VideoList[0];
-            document.getElementById("vid0").load();
-            document.getElementById("bloomvid1").src = json.VideoList[1];
-            document.getElementById("vid1").load();
-            document.getElementById("bloomvid2").src = json.VideoList[2];
-            document.getElementById("vid2").load();
-            document.getElementById("bloomvid3").src = json.VideoList[3];
-            document.getElementById("vid3").load();
-            document.getElementById("bloomvid4").src = json.VideoList[4];
-            document.getElementById("vid4").load();
         }
     });
 </script>
