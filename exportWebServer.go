@@ -19,11 +19,11 @@ import (
 
 type httpServer struct {
 	nestMessageToHTTP chan nest.Nest
-	httpServ              *http.Server
-	conn                  *websocket.Conn
-	msgJSON               []byte
-	templates             map[string]*template.Template
-	store                 store
+	httpServ          *http.Server
+	conn              *websocket.Conn
+	msgJSON           []byte
+	templates         map[string]*template.Template
+	store             store
 }
 
 type meas struct {
@@ -74,7 +74,7 @@ func (httpServ *httpServer) listen(context context.Context) {
 
 func (httpServ *httpServer) refreshWebsocket() {
 	t := append(httpServ.msgJSON, []byte("SEPARATOR"+httpServ.store.String("temperatureCelsius"))...)
-	t = append(t, []byte("SEPARATOR"+httpServ.store.String("windGustkmh"))...)
+	t = append(t, []byte("SEPARATOR"+httpServ.store.String("humidity"))...)
 	err := httpServ.conn.WriteMessage(websocket.TextMessage, t)
 	checkErr(err, funcName(), "Impossible to write to websocket", "")
 }

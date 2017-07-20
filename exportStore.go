@@ -36,7 +36,7 @@ func (m measure) Value() float64 {
 func createStore(messages chan nest.Nest) (store, error) {
 	stores := make(map[string]*ring.Ring)
 	stores["temperatureCelsius"] = &ring.Ring{}
-	stores["windGustkmh"] = &ring.Ring{}
+	stores["humidity"] = &ring.Ring{}
 	return store{in: messages, stores: stores}, nil
 
 }
@@ -54,8 +54,8 @@ func (c *store) listen(context context.Context) {
 			log.WithFields(logrus.Fields{
 				"fct": "exportStore.listen",
 			}).Debug("Receive message")
-			c.stores["temperatureCelsius"].Enqueue(measure{time.Now(), msg.GetTemperatureCelsius()})
-			c.stores["windGustkmh"].Enqueue(measure{time.Now(), msg.GetWindGustkmh()})
+			c.stores["temperatureCelsius"].Enqueue(measure{time.Now(), msg.GetAmbientTemperatureC()})
+			c.stores["humidity"].Enqueue(measure{time.Now(), msg.GetHumidity()})
 		}
 	}()
 

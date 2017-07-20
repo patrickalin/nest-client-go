@@ -15,36 +15,19 @@ type client struct {
 	database string
 }
 
-func (c *client) sendnestToInfluxDB(onenest nest.Nest) {
+func (c *client) sendnestToInfluxDB(nest nest.Nest) {
 
 	fmt.Printf("\n%s :> Send nest Data to InfluxDB\n", time.Now().Format(time.RFC850))
 
 	// Create a point and add to batch
-	tags := map[string]string{"nest": onenest.GetCity()}
+	tags := map[string]string{"nest": "living"}
 	fields := map[string]interface{}{
-		"NumOfFollowers":        onenest.GetNumOfFollowers(),
-		"Humidity":              onenest.GetHumidity(),
-		"Uv":                    onenest.GetIndexUV(),
-		"PressureHpa":           onenest.GetPressureHPa(),
-		"PressureInHg":          onenest.GetPressureInHg(),
-		"Night":                 onenest.IsNight(),
-		"Rain":                  onenest.IsRain(),
-		"RainDailyIn":           onenest.GetRainDailyIn(),
-		"RainDailyMm":           onenest.GetRainDailyMm(),
-		"RainIn":                onenest.GetRainIn(),
-		"RainMm":                onenest.GetRainMm(),
-		"RainRateIn":            onenest.GetRainRateIn(),
-		"RainRateMm":            onenest.GetRainRateMm(),
-		"ustainedWindSpeedkmh":  onenest.GetSustainedWindSpeedkmh(),
-		"SustainedWindSpeedMph": onenest.GetSustainedWindSpeedMph(),
-		"SustainedWindSpeedMs":  onenest.GetSustainedWindSpeedMs(),
-		"WindDirection":         onenest.GetWindDirection(),
-		"WindGustkmh":           onenest.GetWindGustkmh(),
-		"WindGustMph":           onenest.GetWindGustMph(),
-		"WindGustMs":            onenest.GetWindGustMs(),
-		"TemperatureCelsius":    onenest.GetTemperatureCelsius(),
-		"TemperatureFahrenheit": onenest.GetTemperatureFahrenheit(),
-		"TimeStamp":             onenest.GetTimeStamp(),
+		"TargetTemperature":  nest.GetTargetTemperatureC(),
+		"AmbientTemperature": nest.GetAmbientTemperatureC(),
+		"Humidity":           nest.GetHumidity(),
+		"Version":            nest.GetSoftwareVersion(),
+		"Status":             nest.GetAway(),
+		"Running":            nest.GetAmbientTemperatureF() < nest.GetTargetTemperatureF(),
 	}
 
 	// Create a new point batch
